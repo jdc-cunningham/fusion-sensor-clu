@@ -32,3 +32,5 @@ I admit the OpenCV part is hard... I mean I tried it weeks/month(s) ago and it w
 At this time this project is far from complete. This is also not really meant to be reproduced, it has a lot of flaws.
 
 [![youtube video of web interface controlling pan tilt servos](repo-images/yt-thumb.PNG)](https://www.youtube.com/watch?v=_qi6G4832OI)
+
+It's funny like how much of a piece of crap it looks like and how much work it takes too... printing the top part for example took 7 hrs...
