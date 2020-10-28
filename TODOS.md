@@ -1,0 +1,13 @@
+- ### web interface
+  - [ ] basic layout
+  - [ ] add basic servo control input
+      - arrows and display of value
+  - [ ] add pi online status
+      - [ ] make this not hardcoded, possibly scannable by front end
+  - [ ] add websocket connected status
+- ### pi
+  - [ ] setup basic node websocket
+  - [ ] send controls to arduino by system calls to python scripts
+- ### arduino
+  - [ ] make basic servo state manager
+  - [ ] add accept capability to command servo from i2c and set state
