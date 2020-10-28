@@ -6,8 +6,17 @@
       - [x] make this not hardcoded, possibly scannable by front end
   - [x] add websocket connected status
 - ### pi
-  - [ ] setup basic node websocket
-  - [ ] send controls to arduino by system calls to python scripts
+  - [x] setup basic node websocket
+  - [x] send controls to arduino by system calls to python scripts
 - ### arduino
-  - [ ] make basic servo state manager
-  - [ ] add accept capability to command servo from i2c and set state
+  - [x] make basic servo state manager
+  - [x] add accept capability to command servo from i2c and set state
+
+- ### updates
+  - [ ] dpad
+    - [ ] add bars/slider
+    - [ ] add quick center
+    - [ ] add setup of major/minor ticks eg. increment by 1 vs. 5
+
+- ### reminders
+  - socket service user specified is pi to have access to smbus2

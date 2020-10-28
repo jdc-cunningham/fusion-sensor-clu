@@ -14,10 +14,10 @@ const Dpad = () => {
   // for the visuals I think sliders would be nice so can immediatley see the intent
   // ability to center, set initial states
 
-  const [increment, setIncrement] = useState(1); // in the future can change eg. 5
-  const [panServoPos, setPanServoPos] = useState(90); // 0 - 180, 90 is expected, manualy set per device
-  const [tiltServoPos, setTiltServoPos] = useState(90);
-  const [piSocket, setPiSocket] = useState(false);
+  const [increment, setIncrement] = useState(10); // in the future can change eg. 5
+  const [panServoPos, setPanServoPos] = useState(105); // 0 - 180, 90 is expected, manualy set per device
+  const [tiltServoPos, setTiltServoPos] = useState(92);
+  const [piSocket, setPiSocket] = useState(false)
 
   // redundant/bad code since connection state not shared between panels
   const connectedToPi = () => document.getElementById('pi-online').classList.contains('on');
@@ -41,14 +41,14 @@ const Dpad = () => {
 
   const updatePan = (dir) => {
     if (dir === 'left') {
-      if (panServoPos - 1 >= 0) {
-        setPanServoPos(panServoPos - 1);
+      if (panServoPos - increment >= 0) {
+        setPanServoPos(panServoPos - increment);
       } else {
         alert('Max range');
       }
     } else {
-      if (panServoPos + 1 <= 180) {
-        setPanServoPos(panServoPos + 1);
+      if (panServoPos + increment <= 180) {
+        setPanServoPos(panServoPos + increment);
       } else {
         alert('Max range');
       }
@@ -57,14 +57,14 @@ const Dpad = () => {
 
   const updateTilt = (dir) => {
     if (dir === 'down') {
-      if (tiltServoPos - 1 >= 0) {
-        setTiltServoPos(tiltServoPos - 1);
+      if (tiltServoPos - increment >= 0) {
+        setTiltServoPos(tiltServoPos - increment);
       } else {
         alert('Max range');
       }
     } else {
-      if (tiltServoPos + 1 <= 180) {
-        setTiltServoPos(tiltServoPos + 1);
+      if (tiltServoPos + increment <= 180) {
+        setTiltServoPos(tiltServoPos + increment);
       } else {
         alert('Max range');
       }
@@ -80,6 +80,9 @@ const Dpad = () => {
 
     piSocket.onopen = (event) => {
       console.log('dpad connected');
+      // center servos on refresh
+      piSocket.send(`p_${panServoPos}`);
+      piSocket.send(`t_${tiltServoPos}`);
       setPiSocket(piSocket);
     };
 
@@ -89,8 +92,16 @@ const Dpad = () => {
   }
 
   useEffect(() => {
+    if (piSocket) {
+      piSocket.send(`p_${panServoPos}`);
+    }
+  }, [panServoPos]);
 
-  }, [panServoPos, tiltServoPos]);
+  useEffect(() => {
+    if (piSocket) {
+      piSocket.send(`t_${tiltServoPos}`);
+    }
+  }, [tiltServoPos]);
 
   // redundant code
   useEffect(() => {
