@@ -4,6 +4,7 @@
 # https://www.aranacorp.com/en/communication-between-raspberry-pi-and-arduino-with-i2c
 # https://stackoverflow.com/a/43234054/2710227
 
+import sys
 from smbus2 import SMBus
 import time
 
@@ -17,8 +18,8 @@ def ConvertStringToBytes(src):
   return converted
 
 def get_cli_args(name='default', first='servo', second='position'):
-  return first, int(second)
+  return first, second
 
-servo, pos = get_args(*sys.argv)
+servo, pos = get_cli_args(*sys.argv)
 
-bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + '_' + pos));
+bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + pos));
