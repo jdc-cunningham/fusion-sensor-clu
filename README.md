@@ -1,7 +1,7 @@
 # A hybrid sensor for volumetric navigation
 (haha sounds fancy)
 
-![the previous setup with steppers no Arduino yet](repo-images\old-image.PNG)
+![the previous setup with steppers no Arduino yet](repo-images/old-image.PNG)
 
 ## What is it
 This is a "tech demonstrator" if you will for me. The intent is to create a depth map from a combination of OpenCV and hard physical measurements. It has a lot of flaws but it has all the minimum parts for the end goal. It's also arguable you don't really need this but to me it's nice having a physical measurement source(single-point lidar/ultrasonic sensor).
@@ -20,7 +20,7 @@ The interface allows manual control but the intent is for OpenCV to take an imag
 
 In the end this would work "autonomously" but the manual interface is for calibration/testing. Also with the Arduino attached I can connect this to a robot/moving vehicle... in this case it will just be a basic 2-wheeled-cr-servo-tail-dragging robot that [I made in the past](https://github.com/jdc-cunningham/noob-robotics/tree/master/taildragger-ultrasound-mapping#other-materials).
 
-![calibration stand](repo-images\calibration-stand.PNG)
+![calibration stand](repo-images/calibration-stand.PNG)
 
 This would ideally spit out an annotated image with depth measurements for me to confirm the right things are getting looked at. This calibration stand should be "easy" regarding black/white cont rast. Concern is size/angle of components regarding if beam will return.
 
@@ -31,4 +31,4 @@ I admit the OpenCV part is hard... I mean I tried it weeks/month(s) ago and it w
 ### 10-28-2020
 At this time this project is far from complete. This is also not really meant to be reproduced, it has a lot of flaws.
 
-[![youtube video of web interface controlling pan tilt servos](repo-images\yt-thumb.PNG)](https://www.youtube.com/watch?v=_qi6G4832OI)
+[![youtube video of web interface controlling pan tilt servos](repo-images/yt-thumb.PNG)](https://www.youtube.com/watch?v=_qi6G4832OI)
