@@ -1,4 +1,4 @@
-# A hybrid sensor for volumetric navigation
+# A hybrid sensor for depth sensing navigation
 (haha sounds fancy)
 
 ![the previous setup with steppers no Arduino yet](repo-images/old-image.PNG)
