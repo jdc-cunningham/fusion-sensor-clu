@@ -1,0 +1,28 @@
+.component__status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.component__status-bar-entry {
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  padding: 0 5px;
+}
+
+.component__status-bar-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc; // off
+  margin-right: 4px;
+
+  &.off {
+    background-color: orange;
+  }
+
+  &.on {
+    background-color: green;
+  }
+}
