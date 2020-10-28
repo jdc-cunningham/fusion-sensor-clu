@@ -5,6 +5,7 @@ import ChevronLeft from '../../assets/icons/uxwing-chevron-left.svg';
 import ChevronRight from '../../assets/icons/uxwing-chevron-right.svg';
 import ChevronDown from '../../assets/icons/uxwing-chevron-down.svg';
 import ChevronUp from '../../assets/icons/uxwing-chevron-up.svg';
+import axios from 'axios';
 
 const Dpad = () => {
 
@@ -14,8 +15,12 @@ const Dpad = () => {
   // ability to center, set initial states
 
   const [increment, setIncrement] = useState(1); // in the future can change eg. 5
-  const [panServoPos, setPanServoPos] = useState(90); // 0 - 180
+  const [panServoPos, setPanServoPos] = useState(90); // 0 - 180, 90 is expected, manualy set per device
   const [tiltServoPos, setTiltServoPos] = useState(90);
+  const [piSocket, setPiSocket] = useState(false);
+
+  // redundant/bad code since connection state not shared between panels
+  const connectedToPi = () => document.getElementById('pi-online').classList.contains('on');
 
   const handleClick = (dir) => {
     switch (dir) {
@@ -65,6 +70,32 @@ const Dpad = () => {
       }
     }
   }
+
+  const piComMoveServo = (servo, pos) => {
+    console.log(connectedToPi());
+  }
+
+  const connectToPiSocket = () => {
+    const piSocket = new WebSocket(`ws://${process.env.REACT_APP_PI_SOCKET_IP_PORT}`);
+
+    piSocket.onopen = (event) => {
+      console.log('dpad connected');
+      setPiSocket(piSocket);
+    };
+
+    piSocket.onmessage = (event) => {
+      console.log('msg from piSocket:', event);
+    };
+  }
+
+  useEffect(() => {
+
+  }, [panServoPos, tiltServoPos]);
+
+  // redundant code
+  useEffect(() => {
+    connectToPiSocket();
+  }, []);
 
   return (
     <div className="component__dpad">

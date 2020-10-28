@@ -4,35 +4,44 @@ import StatusBar from '../../components/status-bar/StatusBar';
 import axios from 'axios';
 
 const LeftPanel = () => {
-  const [connections, setConnections] = useState({
+  const [connection, setconnection] = useState({
     piConnected: false,
-    socketConnected: false
+    socketConnected: false,
+    tries: 0,
+    maxRetries: 10,
   });
 
   // tries to connect every second
   const connectToPi = () => {
-    const piLocalIp = process.env.REACT_APP_PI_LOCAL_IP;
+    const piLocalIp = process.env.REACT_APP_PI_LOCAL_IP_PORT;
     
-    if (!connections.piConnected) {
-      setTimeout(() => {
+    if (!connection.piConnected) {
+      if (connection.tries < connection.maxRetries) {
         axios.get(
-          piLocalIp,
+          `http://${piLocalIp}`,
           { timeout: 3000 }
           )
           .then((res) => {
-            if (res.data === 200) {
-              setConnections({
-                ...connections,
+            console.log(res);
+            if (res.status === 200) {
+              setconnection({
+                ...connection,
                 piConnected: true
               });
             }
           })
           .catch((err) => {
-            connectToPi(); // keep trying can stop with max tries
+            setconnection({
+              ...connection,
+              tries: connection.tries += 1
+            });
+            setTimeout(() => {
+              connectToPi(); // keep trying can stop with max tries
+            }, 1000);
           });
-      }, 1000);
-    } else {
-
+      } else {
+        alert('Max connection retries reached');
+      }
     }
   };
 
@@ -41,9 +50,33 @@ const LeftPanel = () => {
     connectToPi();
   }, []);
 
+  useEffect(() => {
+    if (connection.tries === -1) { // technically adds an extra try
+      connectToPi(); // try again from connect btn
+    }
+  }, [connection.tries]);
+
+  // try to connect to websocket, this only happens once here due to redundant code, handled in dpad
+  useEffect(() => {
+    if (connection.piConnected) {
+      const piSocketIp = process.env.REACT_APP_PI_SOCKET_IP_PORT;
+      const piSocket = new WebSocket(`ws://${piSocketIp}`);
+
+      piSocket.onopen = (event) => {
+        setconnection({
+          ...connection,
+          socketConnected: true,
+        })
+      };
+    }
+  }, [connection.piConnected]);
+
   return (
     <div className="layout__left-panel">
-      <StatusBar connections={connections} />
+      <StatusBar
+        connection={connection}
+        setconnection={setconnection}
+      />
     </div>
   );
 }

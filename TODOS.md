@@ -1,10 +1,10 @@
 - ### web interface
-  - [ ] basic layout
-  - [ ] add basic servo control input
+  - [x] basic layout
+  - [x] add basic servo control input
       - arrows and display of value
-  - [ ] add pi online status
-      - [ ] make this not hardcoded, possibly scannable by front end
-  - [ ] add websocket connected status
+  - [x] add pi online status
+      - [x] make this not hardcoded, possibly scannable by front end
+  - [x] add websocket connected status
 - ### pi
   - [ ] setup basic node websocket
   - [ ] send controls to arduino by system calls to python scripts

@@ -7,7 +7,7 @@ const RightPanel = () => {
   return (
     <div className="layout__right-panel">
       <CameraOutput />
-      <Dpad />
+      <Dpad  />
     </div>
   );
 }
