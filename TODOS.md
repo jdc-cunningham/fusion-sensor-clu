@@ -17,6 +17,9 @@
     - [ ] add bars/slider
     - [ ] add quick center
     - [ ] add setup of major/minor ticks eg. increment by 1 vs. 5
+  - [ ] move servo code
+    - [ ] add callback when servo is done moving, or add matching delay before buttons enabled/able to move again
+      - callback from Arduino i2c probably better in case comm delay
 
 - ### reminders
   - socket service user specified is pi to have access to smbus2
