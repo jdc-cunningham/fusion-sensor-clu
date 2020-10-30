@@ -16,7 +16,7 @@ const Dpad = () => {
 
   const [increment, setIncrement] = useState(10); // in the future can change eg. 5
   const [panServoPos, setPanServoPos] = useState(105); // 0 - 180, 90 is expected, manualy set per device
-  const [tiltServoPos, setTiltServoPos] = useState(92);
+  const [tiltServoPos, setTiltServoPos] = useState(88);
   const [piSocket, setPiSocket] = useState(false)
 
   // redundant/bad code since connection state not shared between panels
@@ -56,7 +56,7 @@ const Dpad = () => {
   }
 
   const updateTilt = (dir) => {
-    if (dir === 'down') {
+    if (dir === 'up') {
       if (tiltServoPos - increment >= 0) {
         setTiltServoPos(tiltServoPos - increment);
       } else {

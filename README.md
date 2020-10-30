@@ -26,6 +26,11 @@ This would ideally spit out an annotated image with depth measurements for me to
 
 I admit the OpenCV part is hard... I mean I tried it weeks/month(s) ago and it was disappointing the edge detection as most pictures are not clean/have obvious gradients/stuff to measure. Also the other thing is it's SO SLOW... as in 30x slower than a full-sized pi. It must be those cores... anyway it's probable I will process the images by an API so this thing is even more unnecessarily complicated.
 
+## Code flow
+Web interface is "optional" for calibration/manual command. Ideally it would just work, the OpenCV part would drive it all along with spatial math/physical measurements/and movement.
+
+The Pi hosts a webserver and socket(don't really need both). The commands from the web interface eg. manual arrow clicks for moving the sensor head pan/tilt is captured by the pi websocket(node) and talks to the Arduino by I2C sending a comand like `t178` which means tilt servo to 178 deg. This command is passed from the node socket to pi by doing an os system call, running the python script `move-servo.py` with the `t` and `178` as CLI params.
+
 ## Status
 
 ### 10-28-2020
