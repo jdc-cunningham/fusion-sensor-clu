@@ -4,11 +4,23 @@
     - [ ] add quick center
     - [ ] add setup of major/minor ticks eg. increment by 1 vs. 5
   - [ ] move servo code
-    - [ ] add callback when servo is done moving, or add matching delay before buttons enabled/able to move again
+    - [ ] add callback when seharvo is done moving, or add matching delay before buttons enabled/able to move again
       - callback from Arduino i2c probably better in case comm delay
 
 - ### reminders
   - socket service user specified is pi to have access to smbus2
+
+### 11/01/2020
+- [x] try out node i2c
+  - see if it works
+    - stop systemd code
+    - try node i2c examples, check serial monitor
+      - had to add new lines to stuff
+      - doesn't work... write runs, Arduino receives nothing, error callback happens but says null
+      - did have problems with the gcc install stuff(paths/package don't exist)
+  - try to use it with websocket so Arduino response goes back up to web interface
+- [ ] other alternatives
+  - get websocket to work in Python, issue is Python version mixing
 
 ### 10/29/2020
 - ### web interface

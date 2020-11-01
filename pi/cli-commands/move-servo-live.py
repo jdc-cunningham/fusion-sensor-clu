@@ -22,17 +22,4 @@ def get_cli_args(name='default', first='servo', second='position'):
 
 servo, pos = get_cli_args(*sys.argv)
 
-print("yes")
-
-# listen for callback
-while True:
-  try:
-      data=bus.read_i2c_block_data(addr,0x00,16)
-      print("recieve from slave:")
-      print(data)
-      break
-  except:
-      print("remote i/o error")
-      time.sleep(0.5)
-
-# bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + pos));
+bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + pos));
