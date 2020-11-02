@@ -20,21 +20,16 @@ wsServer.on('request', function(request) {
     // from repo as is this would be the path if cloning into /home/pi
     const msgParts = message.utf8Data.split('_');
     const cmd = `cd /home/pi/fusion-sensor-clu/pi/cli-commands
-    python move-servo.py ${msgParts[0]} ${msgParts[1]} >> py-call.log`;
-
-    console.log('msg', message);
+    python move-servo.py ${msgParts[0]} ${msgParts[1]}`;
 
     exec(cmd, function (error, stdout, stderr) {
       if (error) {
-	      console.log('command failed', error.message);
+	console.log('command failed', error.message);
       }
       if (stderr) {
-	      console.log('stderr', stderr);
+	console.log('stderr', stderr);
       }
-      console.log('output', stdout);
     });
-
-    connection.sendUTF('servos called');
   });
 
   // connection.on('close', function(reasonCode, description)) {

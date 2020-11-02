@@ -21,6 +21,13 @@
   - try to use it with websocket so Arduino response goes back up to web interface
 - [ ] other alternatives
   - get websocket to work in Python, issue is Python version mixing
+- well... I think I'm done with messing around with that, I still have not gotten the hard part, there may be a minor disconnect between servo motion and reading sensor data but I can just do batch sweeping/waiting/assumptions. I still need to get to the actual hard parts of this project eg. the basic 3d mapping from image/physical sensor data sampling
+- thought about using a "signal" wire for events, it would be get a start/end pulse from Arduino and read by the pi through ADC, but it would introduce a lot of complexity.
+  - main reason may not be worth it is the servos don't have tracking so can only assume they're done moving
+  - still having an end signal come from Arduino is something
+- [ ] get panning points
+  - add pan code
+  - do intermittent sampling, issue is syncing commands between Arduino and Python without a bridge
 
 ### 10/29/2020
 - ### web interface
