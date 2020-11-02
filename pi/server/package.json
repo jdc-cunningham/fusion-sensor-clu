@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "coffee-script": "^1.12.7",
     "express": "^4.17.1",
+    "i2c": "^0.2.4",
+    "i2c-bus": "^5.2.1",
     "websocket": "^1.0.32"
   }
 }
