@@ -3,6 +3,8 @@
 // https://dronebotworkshop.com/i2c-arduino-raspberry-pi/
 // laughably struggled with simple string split
 // https://forum.arduino.cc/index.php?topic=155667.0
+// millis (after spending several hours not getting delay to work)
+// https://arduino.stackexchange.com/questions/16659/alternative-to-delay-function
 
 #include <Wire.h>
 #include <Servo.h>
@@ -30,40 +32,44 @@ void setup() {
   tiltServo.write(tiltServoPos);
 }
 
+// pulled from SE link above
+void timeLoop (long int startMillis, long int interval){
+  // this loops until 2 milliseconds has passed since the function began
+  while(millis() - startMillis < interval){} 
+}
+
 // makes sure max range not exceeded
 void servoWrite(String servo, int pos) {
   if (servo == "pan") {
-    if (pos <= panServoPos + panMaxRange || pos >= panServoPos - panMaxRange) {
+    if (pos <= (panServoPos + panMaxRange) || pos >= (panServoPos - panMaxRange)) {
+      // Serial.println("write pan");
       panServo.write(pos);
-      Serial.println("pan servo");
-      Serial.print(pos);
     }
   } else {
-    if (pos <= tiltServoPos + tiltMaxRange || pos >= tiltServoPos - tiltMaxRange) {
+    if (pos <= (tiltServoPos + tiltMaxRange) || pos >= (tiltServoPos - tiltMaxRange)) {
+      // Serial.println("write tilt");
       tiltServo.write(pos);
-      Serial.println("tilt servo");
-      Serial.print(pos);
     }
   }
-
-  Serial.println("");
 }
 
 void sweep(String servo, int increment = 2, int delayMs = 1000) {
-  Serial.println("sweep delay");
-  Serial.print(delayMs);
-  bool panServo = servo == "pan";
-  int sweepMin = panServo ? panServoPos - panMaxRange : tiltServoPos - tiltMaxRange; // 30 is a coincidence
-  int sweepMax = panServo ? panServoPos + panMaxRange : tiltServoPos + tiltMaxRange;
+  bool isPanServo = servo == "pan";
+  int sweepMin = isPanServo ? (panServoPos - panMaxRange) : (tiltServoPos - tiltMaxRange); // 30 is a coincidence
+  int sweepMax = isPanServo ? (panServoPos + panMaxRange) : (tiltServoPos + tiltMaxRange);
 
   for (int i = sweepMin; i <= sweepMax; i = i + increment) {
+    Serial.println("for");
+    Serial.print(i);
+    Serial.println("");
+
     servoWrite(servo, i);
 
     if (i > sweepMax) {
       servoWrite(servo, i);
     }
 
-    Serial.println("for delay");
+    // timeLoop(millis(), delayMs);
     delay(delayMs);
   }
 }
@@ -79,11 +85,8 @@ void receiveEvent(int bytes) {
   // the reason these values are split is because
   // if I just join them into one big string, try to parse/access by array
   // the values aren't correct
-  Serial.println("receiving");
   while (Wire.available()) {
     char c = Wire.read();
-
-    Serial.print(c);
 
     if (loopCounter == 1) {
       mainCmd = c;
@@ -97,15 +100,15 @@ void receiveEvent(int bytes) {
       thirdCmd = c;
     }
 
-    if (loopCounter > 5) { // eg. s179t1000... what about 0.5 or 10000 (10 seconds)
+    if (loopCounter > 5 && loopCounter <= 9) { // eg. s179t1000... what about 0.5 or 10000 (10 seconds)
       fourthCmd += c;
     }
 
     loopCounter++;
   }
+}
 
-  Serial.println("");
-
+void loop() {
   if (mainCmd == "p") {
     servoWrite("pan", secondCmd.toInt());
   }
@@ -121,8 +124,6 @@ void receiveEvent(int bytes) {
       sweep("tilt", secondCmd.toInt(), fourthCmd.toInt());
     }
   }
-}
 
-void loop() {
   delay(100);
 }
