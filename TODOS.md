@@ -28,6 +28,9 @@
 - crap did a download for VS Code/suggested after opening ino file and now touchpad/keyboard doesn't work ha
 - this thing is trash in the long run, does not reposition, no position callback(encoder), cross language calls... ehh
 - hit a wall delay in dynamic loop is ignored so sweep doesn't work
+- guhh still stuck, monkey brain me trying to pry the end of a battery, so it starts smoking/getting warm as the walls are crushed/making contact. I got lucky it didn't get worst, but I commemorate this project to the 18650 which I had to drain, send back to the underverse.
+- wow... that was a time sync... dumb dumb dumb. So you're not supposed to call delay and serial and shit inside a handler for i2c... I think shared clocks or something... anyway I have to refactor my code then I am closer to getting the 3d coordinates and plotting them in webgl. After that bridging OpenCV as the primary "brain/driver" in conjunction with the physical measurements to generate essentially a slower/more piece of crap real time map from an RGBD camera... but... it's on a Pi Zero(kinda).
+- so I kinda failed... I know what I have to do, have to rework the code so the events are flags, will look at [this i2c guide](https://forum.arduino.cc/index.php?topic=683181) so I can get data back from Arduino on demand if I need to
 
 ### 11/01/2020
 - [x] try out node i2c
