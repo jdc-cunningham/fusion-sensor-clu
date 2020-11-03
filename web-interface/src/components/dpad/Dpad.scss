@@ -9,6 +9,20 @@
   margin-top: 10px;
 }
 
+.component__dpad-settings {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  padding: 5px;
+
+  .dpad-settings__increment {
+    text-align: center;
+    max-width: 50px;
+    margin: 0 5px;
+  }
+}
+
 .component__dpad-top {
   display: flex;
   align-items: center;
