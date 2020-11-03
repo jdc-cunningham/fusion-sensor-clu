@@ -91,6 +91,15 @@ const Dpad = () => {
     };
   }
 
+  const updateIncrement = (event) => {
+    const newIncr = event.target.value;
+    if (newIncr > 90) {
+      alert('exceeded max increment of 90 deg');
+    } else {
+      setIncrement(newIncr);
+    }
+  }
+
   useEffect(() => {
     if (piSocket) {
       piSocket.send(`p_${panServoPos}`);
@@ -111,6 +120,11 @@ const Dpad = () => {
   return (
     <div className="component__dpad">
       {/* this is lazy */}
+      <div className="component__dpad-settings">
+        increment:
+        <input className="dpad-settings__increment" type="number" onChange={ (e) => updateIncrement(e) } value={increment} />
+        deg
+      </div>
       <div className="component__dpad-top">
         <button
           type="button"
