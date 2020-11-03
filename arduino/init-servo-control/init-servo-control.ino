@@ -3,8 +3,6 @@
 // https://dronebotworkshop.com/i2c-arduino-raspberry-pi/
 // laughably struggled with simple string split
 // https://forum.arduino.cc/index.php?topic=155667.0
-// millis (after spending several hours not getting delay to work)
-// https://arduino.stackexchange.com/questions/16659/alternative-to-delay-function
 
 #include <Wire.h>
 #include <Servo.h>
@@ -22,6 +20,8 @@ String secondCmd = "";
 String thirdCmd = "";
 String fourthCmd = "";
 
+bool isCmdProcessing = false;
+
 void setup() {
   Serial.begin(9600);
   Wire.begin(0x8);
@@ -30,12 +30,6 @@ void setup() {
   tiltServo.attach(3);
   panServo.write(panServoPos);
   tiltServo.write(tiltServoPos);
-}
-
-// pulled from SE link above
-void timeLoop (long int startMillis, long int interval){
-  // this loops until 2 milliseconds has passed since the function began
-  while(millis() - startMillis < interval){} 
 }
 
 // makes sure max range not exceeded
@@ -51,17 +45,18 @@ void servoWrite(String servo, int pos) {
       tiltServo.write(pos);
     }
   }
+
+  isCmdProcessing = false;
 }
 
+// delayMs set to 0 due to base delay of 1s per servo motion
 void sweep(String servo, int increment = 2, int delayMs = 1000) {
   bool isPanServo = servo == "pan";
   int sweepMin = isPanServo ? (panServoPos - panMaxRange) : (tiltServoPos - tiltMaxRange); // 30 is a coincidence
   int sweepMax = isPanServo ? (panServoPos + panMaxRange) : (tiltServoPos + tiltMaxRange);
 
   for (int i = sweepMin; i <= sweepMax; i = i + increment) {
-    Serial.println("for");
-    Serial.print(i);
-    Serial.println("");
+    isCmdProcessing = true;
 
     servoWrite(servo, i);
 
@@ -72,16 +67,26 @@ void sweep(String servo, int increment = 2, int delayMs = 1000) {
     // timeLoop(millis(), delayMs);
     delay(delayMs);
   }
+
+  isCmdProcessing = false;
 }
 
-void receiveEvent(int bytes) {
-  String fullCommand = "";
-  int loopCounter = 0;
+// these do need better names, not just incremental commands
+void resetI2cVariables() {
   mainCmd = "";
   secondCmd = "";
   thirdCmd = "";
   fourthCmd = "";
-  
+}
+
+void receiveEvent(int bytes) {
+  if (isCmdProcessing) {
+    return;
+  }
+
+  int loopCounter = 0;
+  resetI2cVariables();
+
   // the reason these values are split is because
   // if I just join them into one big string, try to parse/access by array
   // the values aren't correct
@@ -109,12 +114,17 @@ void receiveEvent(int bytes) {
 }
 
 void loop() {
+  // this is all ugly but still in prototype stage
   if (mainCmd == "p") {
+    isCmdProcessing = true;
     servoWrite("pan", secondCmd.toInt());
+    delay(1000); // no position feedback
   }
   
   if (mainCmd == "t") {
+    isCmdProcessing = true;
     servoWrite("tilt", secondCmd.toInt());
+    delay(1000); // no position feedback
   }
 
   if (mainCmd == "s") {
@@ -123,7 +133,14 @@ void loop() {
     } else {
       sweep("tilt", secondCmd.toInt(), fourthCmd.toInt());
     }
+
+    // recenter
+    isCmdProcessing = true;
+    servoWrite("pan", panServoPos);
+    isCmdProcessing = true;
+    servoWrite("tilt", tiltServoPos);
   }
 
+  resetI2cVariables();
   delay(100);
 }
