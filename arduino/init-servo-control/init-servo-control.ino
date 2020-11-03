@@ -34,13 +34,13 @@ void setup() {
 void servoWrite(String servo, int pos) {
   if (servo == "pan") {
     if (pos <= panServoPos + panMaxRange || pos >= panServoPos - panMaxRange) {
-      // panServo.write(pos);
+      panServo.write(pos);
       Serial.println("pan servo");
       Serial.print(pos);
     }
   } else {
     if (pos <= tiltServoPos + tiltMaxRange || pos >= tiltServoPos - tiltMaxRange) {
-      // tiltServo.write(pos);
+      tiltServo.write(pos);
       Serial.println("tilt servo");
       Serial.print(pos);
     }
@@ -50,16 +50,20 @@ void servoWrite(String servo, int pos) {
 }
 
 void sweep(String servo, int increment = 2, int delayMs = 1000) {
+  Serial.println("sweep delay");
+  Serial.print(delayMs);
   bool panServo = servo == "pan";
   int sweepMin = panServo ? panServoPos - panMaxRange : tiltServoPos - tiltMaxRange; // 30 is a coincidence
   int sweepMax = panServo ? panServoPos + panMaxRange : tiltServoPos + tiltMaxRange;
 
-  for (int i = sweepMin; i <= sweepMax; i += increment) {
+  for (int i = sweepMin; i <= sweepMax; i = i + increment) {
     servoWrite(servo, i);
 
     if (i > sweepMax) {
       servoWrite(servo, i);
     }
+
+    Serial.println("for delay");
     delay(delayMs);
   }
 }
