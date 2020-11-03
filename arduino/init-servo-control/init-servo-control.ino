@@ -10,8 +10,10 @@
 Servo tiltServo;
 Servo panServo;
 
-int panServoPos = 105;
-int tiltServoPos = 92;
+int panServoPos = 104;
+int panMaxRange = 30;
+int tiltServoPos = 89;
+int tiltMaxRange = 30;
 
 String moveServo = ""; // p or t for pan/tilt
 String moveServoPos = ""; // 0-180 casted to int
@@ -24,6 +26,34 @@ void setup() {
   tiltServo.attach(3);
   panServo.write(panServoPos);
   tiltServo.write(tiltServoPos);
+}
+
+// makes sure max range not exceeded
+void servoWrite(String servo, int pos) {
+  if (servo == "pan") {
+    if (pos <= panServoPos + panMaxRange || pos >= panServoPos - panMaxRange) {
+      panServo.write(pos);
+    }
+  } else {
+    if (pos <= tiltServoPos + tiltMaxRange || pos >= tiltServoPos - tiltMaxRange) {
+      tiltServo.write(pos);
+    }
+  }
+}
+
+void sweep(String servo, int increment = 2, int delayMs = 1000) {
+  bool panServo = servo == "pan";
+  int sweepMin = panServo ? panServoPos - panMaxRange : tiltServoPos - tiltMaxRange; // 30 is a coincidence
+  int sweepMax = panServo ? panServoPos + panMaxRange : tiltServoPos + tiltMaxRange;
+
+  for (int i = sweepMin; i <= sweepMax; i += increment) {
+    servoWrite(servo, i);
+
+    if (i > sweepMax) {
+      servoWrite(servo, i);
+    }
+    delay(delayMs);
+  }
 }
 
 void receiveEvent(int bytes) {
