@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './LeftPanel.scss';
 import StatusBar from '../../components/status-bar/StatusBar';
+import SweepSample from '../../components/data-gathering/sweep/SweepSample';
 import axios from 'axios';
 
 const LeftPanel = () => {
@@ -9,6 +10,7 @@ const LeftPanel = () => {
     socketConnected: false,
     tries: 0,
     maxRetries: 10,
+    socket: null,
   });
 
   // tries to connect every second
@@ -66,6 +68,7 @@ const LeftPanel = () => {
         setconnection({
           ...connection,
           socketConnected: true,
+          socket: piSocket
         })
       };
     }
@@ -77,6 +80,7 @@ const LeftPanel = () => {
         connection={connection}
         setconnection={setconnection}
       />
+      <SweepSample connection={connection} />
     </div>
   );
 }

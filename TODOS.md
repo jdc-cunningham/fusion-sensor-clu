@@ -17,12 +17,17 @@
 - [x] going to try a boosted single cell battery for the first time
   - damn I soldered first one backwards in polarity, magic smoke... glad I have several
   - working now pretty cool first 18650 cell this one is 3.4Ah
-- [ ] add real time increment input to adjust
-- [ ] will determine max pan/tilt ranges
-- [ ] add wrapper to servo calls in Arduino that checks against max pos
+- [x] add real time increment input to adjust
+- [x] will determine max pan/tilt ranges
+- [x] add wrapper to servo calls in Arduino that checks against max pos
+  - printing out write degrees is a good idea before actually talkign to servos turns out
+    - sent in 5557 (deg) haha
 - [ ] create first polling/measurement set that runs from web all the way down
 - [ ] plot 3d points in webgl (may be tough have watched some videos, skimmed MDN tutorial)
 - at this time I am super burnt so we'll see, I won't give up till I'm crying or something happens
+- crap did a download for VS Code/suggested after opening ino file and now touchpad/keyboard doesn't work ha
+- this thing is trash in the long run, does not reposition, no position callback(encoder), cross language calls... ehh
+- hit a wall delay in dynamic loop is ignored so sweep doesn't work
 
 ### 11/01/2020
 - [x] try out node i2c

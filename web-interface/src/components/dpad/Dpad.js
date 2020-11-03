@@ -13,10 +13,11 @@ const Dpad = () => {
   // will build with servos in mind
   // for the visuals I think sliders would be nice so can immediatley see the intent
   // ability to center, set initial states
+  // the initial center values match what's in Arduino
 
   const [increment, setIncrement] = useState(10); // in the future can change eg. 5
-  const [panServoPos, setPanServoPos] = useState(105); // 0 - 180, 90 is expected, manualy set per device
-  const [tiltServoPos, setTiltServoPos] = useState(88);
+  const [panServoPos, setPanServoPos] = useState(104); // 0 - 180, 90 is expected, manualy set per device
+  const [tiltServoPos, setTiltServoPos] = useState(89);
   const [piSocket, setPiSocket] = useState(false)
 
   // redundant/bad code since connection state not shared between panels
@@ -44,13 +45,13 @@ const Dpad = () => {
       if (panServoPos - increment >= 0) {
         setPanServoPos(panServoPos - increment);
       } else {
-        alert('Max range');
+        alert('Max range left');
       }
     } else {
       if (panServoPos + increment <= 180) {
         setPanServoPos(panServoPos + increment);
       } else {
-        alert('Max range');
+        alert('Max range right');
       }
     }
   }
@@ -60,13 +61,13 @@ const Dpad = () => {
       if (tiltServoPos - increment >= 0) {
         setTiltServoPos(tiltServoPos - increment);
       } else {
-        alert('Max range');
+        alert('Max range up');
       }
     } else {
       if (tiltServoPos + increment <= 180) {
         setTiltServoPos(tiltServoPos + increment);
       } else {
-        alert('Max range');
+        alert('Max range down');
       }
     }
   }
