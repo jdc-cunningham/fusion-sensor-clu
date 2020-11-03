@@ -7,7 +7,7 @@ const SweepSample = (props) => {
   // skipping validation for now, trying to get to fully functioning thing with plot
 
   const [increment, setIncrement] = useState(1); // deg
-  const [delay, setDelay] = useState(1000); // ms
+  const [delay, setDelay] = useState(500); // ms units, servos have base 1s delay on Arduino side
   const [servo, setServo] = useState("pan");
 
   const servoCharMap = (servo) => (servo === "pan" ? "p" : "t");
@@ -54,9 +54,9 @@ const SweepSample = (props) => {
         <option value="tilt">tilt</option>
       </select>
       <p>increment</p>
-      <input type="number" value={increment} onChange={ (e) => setIncrement(e.target.value) }/>
+      <input type="number" value={increment} min="1" onChange={ (e) => setIncrement(e.target.value) }/>
       <p>(deg) delay</p>
-      <input type="number" value={delay} onChange={ (e) => setDelay(e.target.value) } className="sweep-sample-delay"/>
+      <input type="number" value={delay} min="1" onChange={ (e) => setDelay(e.target.value) } className="sweep-sample-delay"/>
       <p>(ms)</p>
     </div>
   );
