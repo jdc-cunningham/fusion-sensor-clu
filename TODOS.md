@@ -10,6 +10,20 @@
 - ### reminders
   - socket service user specified is pi to have access to smbus2
 
+### 11/02/2020
+- crash course in lobotomy
+- time to perform my magic trick of making a rock absorb blood
+  - super burnt
+- [x] going to try a boosted single cell battery for the first time
+  - damn I soldered first one backwards in polarity, magic smoke... glad I have several
+  - working now pretty cool first 18650 cell this one is 3.4Ah
+- [ ] add real time increment input to adjust
+- [ ] will determine max pan/tilt ranges
+- [ ] add wrapper to servo calls in Arduino that checks against max pos
+- [ ] create first polling/measurement set that runs from web all the way down
+- [ ] plot 3d points in webgl (may be tough have watched some videos, skimmed MDN tutorial)
+- at this time I am super burnt so we'll see, I won't give up till I'm crying or something happens
+
 ### 11/01/2020
 - [x] try out node i2c
   - see if it works
