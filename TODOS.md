@@ -2,13 +2,40 @@
   - [ ] dpad
     - [ ] add bars/slider
     - [ ] add quick center
-    - [ ] add setup of major/minor ticks eg. increment by 1 vs. 5
+    - [x] add setup of major/minor ticks eg. increment by 1 vs. 5
+      - only one input but variable
   - [ ] move servo code
     - [ ] add callback when seharvo is done moving, or add matching delay before buttons enabled/able to move again
       - callback from Arduino i2c probably better in case comm delay
 
 - ### reminders
   - socket service user specified is pi to have access to smbus2
+
+### 11/03/2020
+- I think I may have a self-sustaining drive to finish this project now, where I will, "will" it into existence
+  even if it's a piece of crap
+- I'm thinking about how the scanner will work
+  "brought to you by X1 Carbon 3rd gen" ha always wanted this laptop though I hate the left-most fn key
+- scanning process, Arduino is still disconnected from Pi/Python in real time due to i2c interrupt being brief/prefer batching
+  also ultimately any sort of "position/is-it-done" kind of stuff with a servo is pointless without a measurement eg. ADC on Pi side measuring spikes on servo by pot hack or something
+  eg. quit using crayons and get a motor with an encoder or something
+  - websocket sends command to sweep(x,y)
+  - python code that talks to i2c to send simple string command sends command but also starts python sensor measurement gathering
+    - all under pretense 1 second apart delays per servo motion or whatever delay sent down by websocket is honored(flaw)
+  - the data is just stored, no math is performed
+  - after the scan the math is performed to get the x,y,z coordinates for the 3d plotting from angle/arcs
+  - these values will get read however the process is initiated from front end as part of parent event(sucks because socket is using node then talking to python)
+    - some kind of bus between node/pyton I think is possible too, right now I'm using `exec` which is one directional in a full linux board at some point, the type that has mixed my use case
+    - not impossible to use python socket but a PITA and having to mix python versions(also not impossible)
+  - values received by webgl plotter on front end, then I can visualize it, ooh pretty the skewed piece of crap
+  - next would be some world modeling/translation based on motion(IMU interface/attached to wheels)
+- at some point will actually use OpenCV as the main driver
+  - takes image
+  - scans image for objects
+  - do process above however with override to not sweep but pick specific points to probe or partially sweep
+  - all based on the pan/tilt, camera fov, etc... in other words probably will suck, but once I have a full system can improve upon it
+- I think I will use something like a Beaglebone in the future, try to keep the "language" a single stack, except for the web part, may go for desktop just for experience/learning
+- added a `SCANNING_PROCESS.md` and `FUTURE.md`
 
 ### 11/02/2020
 - crash course in lobotomy
