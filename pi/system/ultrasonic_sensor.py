@@ -19,6 +19,7 @@ class UltrasonicSensor:
       raise ValueError('wrong unit')
 
   def get_measurement(self):
+    GPIO.setmode(GPIO.BCM)
     TRIG = 27
     ECHO = 22
 
