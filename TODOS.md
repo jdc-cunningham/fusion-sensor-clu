@@ -12,7 +12,9 @@
   - socket service user specified is pi to have access to smbus2
 
 ### 11/05/2020
-- [ ] look into why the angles don't match
+- [x] look into why the angles don't match
+  - due to mismatch horn lengths and the horns weren't parallel to each other from the start, only affected pan 
+  - updated horn(extended) and updated center points
 - [ ] try simpler set of points, see if can plot a plane
 - [ ] read through webgl example code
 - [ ] full functionality eg. from web command to scan/display webgl "meshes"

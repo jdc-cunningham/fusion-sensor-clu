@@ -10,7 +10,7 @@
 Servo tiltServo;
 Servo panServo;
 
-int panServoPos = 104;
+int panServoPos = 94;
 int panMaxRange = 30;
 int tiltServoPos = 89;
 int tiltMaxRange = 30;
