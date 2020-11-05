@@ -11,6 +11,22 @@
 - ### reminders
   - socket service user specified is pi to have access to smbus2
 
+### 11/05/2020
+- [ ] look into why the angles don't match
+- [ ] try simpler set of points, see if can plot a plane
+- [ ] read through webgl example code
+- [ ] full functionality eg. from web command to scan/display webgl "meshes"
+  - determine the string command for box scanning
+  - do full math
+  - add other "callback" part on front end that runs after certain time has passed(dumb) depends on number of points
+  - pull the values hosted by pi server
+  - plot in webgl
+  - then start doing the world mapping
+  - add imu
+  - add tracking
+  - add collision detection
+  - add OpenCV blob finding and combine that with above for determining what to scan and plot in world
+
 ### 11/04/2020
 - trying to actually get something done today
 - [x] test angles see accuracy and if measurements still work
