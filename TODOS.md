@@ -11,6 +11,60 @@
 - ### reminders
   - socket service user specified is pi to have access to smbus2
 
+### 11/04/2020
+- trying to actually get something done today
+- [x] test angles see accuracy and if measurements still work
+  - [x] verify angles visually
+      - this is not very accurate at all, the accuracy magnitude I had planned initially is way off at least for the "lidar"
+  - [x] check measurements from ultrasonic sensor
+    - usensor face is 0.5" off (less) from pan/tilt axes, also seems like camera face is 3/8" back from us sensor face
+    - yeah this thing is unfortunately f'd since the part where the beam/wave leaves the sensors are not directly in line, there are offsets
+      especially when it rotates about the wrong axis
+    - rotate 10 deg right, measured 17.73" + 0.5" => 18.51" compared to expected trig value: 18.28" -> 0.23" margin of error
+      try again
+      10deg -> 18.23" expected, actual is 17.51" + 0.5" -> 18.01" -> 0.22" error
+      20deg -> 19.16" expected, actual is 17.72" + 0.5" -> 18.22" -> 1.44" error oof
+      30deg -> 20.79" expected, actual is 18.1" + 0.5" -> 18.6" -> 2.19" error ahhh
+    - try lidar at 2' -> measures 26.38" -> now bang on at 61cm or 24.02"
+      10 deg -> 65.5 cm (avg) -> 66cm
+      20 deg -> 66 cm -> 97cm on second measure going backwards
+      30 deg -> 78 cm -> 
+      ehh... idk... also able to pan farther out than "limits" eg. max of 30 deg in either direction, maybe a good thing (60deg not a big fov for sensors)
+    TLDR these measurements suck/not reliable, a panning/general averaging may be passable given enough large margin of errors
+    Also sometimes the servos don't move... even when commands are sent, that sucks, concerning
+- [x] write first sweep samples
+  - ex of 5 deg incr, within 60 deg limit = 12 points -> 6 seconds duration, tested and took about 7.86 seconds to start and stop moving(recenter at end of sweep)
+    - as simple baseline can sample at half the speed of delay eg. 500ms = sample every 250ms
+    stuck on file writing issue
+    - this is not great but I'm just creating a folder with 777 permission, inside that a file with 777 permission
+      this code runs by systemd and the user is set to pi, logs confirm as pi but for some reason denied to write to file still when node calls python cli exec cmd
+      setting working directory in service that runs the socket
+      hmm hmm hmm... this is bad... can't get anything to write
+      so... 3 hrs later and crying blood... I guess somehow the python file is cached that node calls, since I disabled the bus write line but somehow the servos
+      still respond to the web ui calls
+      Jesus... lmao I didn't change the new directory for this project in the socket part of nodejs so it was never calling the updated python file... ahhhhhhhhh it's fine... we all age
+- [ ] come up with box-sweep string cmd
+  - has to be simple defined by end limits and steps(vertical samples)
+  - ex. current sweep cmd s001p500 -> sweep, 1 deg, pan, 500
+  - Arduino can only understand code like above so far so python has to do the parsing/bus calls per delay
+  - I think for now I will get manual coordinates then I will plot them into webgl
+  - I'm doing new measurements again and it doesn't seem too bad actually the values
+  - manual measurements, 7 rows (30, 20, 10, 0, -10, -20, -30)
+    - what's interesting is the 0 plane referencing which sensor/around which rotation point... I tried to do that in this design but I messed it up since I didn't know where the waves propagate from
+    - these values have to get cleaned up (outliers)
+    [
+      [17.62, 36.23, 58.89, 44.22, 59.2, 58.88, 54.89, 17.99, 18.13, 17.65, 18.2, 17.78, 18.01], // 30
+      [17.5, 18.11, 17.7, 17.89, 17.52, 17.36, 17.39, 17.52, 17.58, 17.41, 17.33, 17.33, 17.55], // 20
+      [17.39, 17.39, 17.57, 17.8, 17.45, 17.6, 17.2, 17.39, 17.22, 17.22, 17.05, 17.39, 17.35], // 10 deg
+      [17.31, 17.67, 17.51, 17.54, 17.47, 17.38, 18.28, 17.26, 17.31, 17.33, 17.33, 17.45, 17.27], // 0 deg
+      [17.46, 17.98, 17.91, 17.76, 17.6, 17.6, 17.6, 17.76, 17.62, 17.58, 17.39, 17.42, 17.63],
+      [17.85, 18.06, 18.16, 18.39, 18.16, 18.0, 18.18, 18.07, 17.99, 17.87, 17.86, 17.86, 18.03],
+      [19.15, 133.03, 132.53, 132.63, 132.7, 20.73, 20.06, 19.08, 19.01, 18.82, 18.75, 18.83, 18.84] // this angle too steep until mounted to frame
+    ]
+- [ ] write trig math to get x, y, z coordinates
+- [ ] maybe plot coordinates into webgl even if manually done
+      
+
 ### 11/03/2020
 - I think I may have a self-sustaining drive to finish this project now, where I will, "will" it into existence
   even if it's a piece of crap
