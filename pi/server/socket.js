@@ -20,7 +20,7 @@ wsServer.on('request', function(request) {
     // from repo as is this would be the path if cloning into /home/pi
     const msgParts = message.utf8Data.split('_');
     const cmd = `cd /home/pi/fusion-sensor-clu/pi/cli-commands
-    python move-servo.py ${msgParts[0]} ${msgParts[1]}`;
+    python move-servo.py ${msgParts[0]} ${msgParts[1]} > pylog.txt`;
 
     exec(cmd, function (error, stdout, stderr) {
       if (error) {
