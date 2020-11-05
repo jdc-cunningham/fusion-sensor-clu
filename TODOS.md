@@ -61,8 +61,12 @@
       [17.85, 18.06, 18.16, 18.39, 18.16, 18.0, 18.18, 18.07, 17.99, 17.87, 17.86, 17.86, 18.03],
       [19.15, 133.03, 132.53, 132.63, 132.7, 20.73, 20.06, 19.08, 19.01, 18.82, 18.75, 18.83, 18.84] // this angle too steep until mounted to frame
     ]
-- [ ] write trig math to get x, y, z coordinates
+- [x] write trig math to get x, y, z coordinates
 - [ ] maybe plot coordinates into webgl even if manually done
+    - it just occurred to me that the points had to be connected to have faces... I just had dots
+    so I tried a 3d scatter plot and I think my math isn't correct or how I mirrored the values isn't right.
+
+    ![try plot with plotly3d js](repo-images/not-quite.PNG)
       
 
 ### 11/03/2020

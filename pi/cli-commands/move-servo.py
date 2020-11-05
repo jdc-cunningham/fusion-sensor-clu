@@ -32,13 +32,14 @@ def write_to_file(str):
   f.close()
 
 # @params {int} new angle
-# @params {int} delay in ms, divide this by 2 for loop delay
+# @params {int} delay in ms
 def gather_sweep_measurements(incr, delay):
   usensor = UltrasonicSensor()
   cur_loop = 0
   measurements = []
+  max_sweep_angle = 60 # this is due to 30 deg limit either direction
 
-  while cur_loop <= (60/incr): # double sample seems bad for us, maybe for lidar
+  while cur_loop <= (max_sweep_angle/incr): # double sample seems bad for us, maybe for lidar
     measurements.append(usensor.get_measurement())
     cur_loop += 1
     time.sleep((delay/2) * 0.001)
@@ -47,13 +48,16 @@ def gather_sweep_measurements(incr, delay):
 
 servo, pos = get_cli_args(*sys.argv)
 
-bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + pos));
-
-# this parsing is wrong, no two commands anymore
-# also multifunctional
-# ex cmd. s001p500 where s is for sweep, increment is 1 deg, pan servo, 500ms
+# generally a cmd string should just get sent down, but possible need to do loop/long measurement
 if ("s" in servo):
+  # this parsing is wrong, no two commands anymore
+  # also multifunctional
+  # ex cmd. s001p500 where s is for sweep, increment is 1 deg, pan servo, 500ms
+  bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + pos));
+
   cmdParts = servo.split("p")
   incr = cmdParts[0].split("s")[1]
   delay = cmdParts[1]
   gather_sweep_measurements(int(incr), int(delay))
+else:
+  bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + pos));
