@@ -24,10 +24,10 @@ wsServer.on('request', function(request) {
 
     exec(cmd, function (error, stdout, stderr) {
       if (error) {
-	console.log('command failed', error.message);
+	      console.log('command failed', error.message);
       }
       if (stderr) {
-	console.log('stderr', stderr);
+	      console.log('stderr', stderr);
       }
     });
   });

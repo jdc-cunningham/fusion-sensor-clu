@@ -67,7 +67,16 @@
     so I tried a 3d scatter plot and I think my math isn't correct or how I mirrored the values isn't right.
 
     ![try plot with plotly3d js](repo-images/not-quite.PNG)
-      
+
+    What I was trying to measure(the headphone box at 17.25" away from us face)
+    
+    ![top view measure](repo-images/top-view-measure.PNG)
+
+    What the camera's seeing
+
+    ![camera sees](repo-images/what-camera-sees.jpg)
+
+    I also realized my angles don't match eg. 3 x 10 deg increments doesn't go to 30 degrees (paper). Ooh... it's probably my servo arm length not matching the horn on the other side.
 
 ### 11/03/2020
 - I think I may have a self-sustaining drive to finish this project now, where I will, "will" it into existence

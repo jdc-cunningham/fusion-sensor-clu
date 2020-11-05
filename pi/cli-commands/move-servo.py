@@ -26,7 +26,6 @@ def get_cli_args(name='default', first='servo', second='position'):
 
 # intent is to write plain strings or json
 def write_to_file(str):
-  logging.info("write fcn")
   f = open("/home/pi/sensor-fusion-clu/pi/cli-commands/coordinates/values.txt", "w+") # dir set by systemd service
   f.write(str)
   f.close()

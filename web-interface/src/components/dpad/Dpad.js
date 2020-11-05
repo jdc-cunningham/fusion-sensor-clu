@@ -83,7 +83,9 @@ const Dpad = () => {
       console.log('dpad connected');
       // center servos on refresh
       piSocket.send(`p_${panServoPos}`);
-      piSocket.send(`t_${tiltServoPos}`);
+      setTimeout(() => {
+        piSocket.send(`t_${tiltServoPos}`);
+      }, 1000); // servo commands have one sec delay after
       setPiSocket(piSocket);
     };
 
