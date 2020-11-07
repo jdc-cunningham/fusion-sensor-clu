@@ -16,7 +16,7 @@ const Dpad = () => {
   // the initial center values match what's in Arduino
 
   const [increment, setIncrement] = useState(10); // in the future can change eg. 5
-  const [panServoPos, setPanServoPos] = useState(104); // 0 - 180, 90 is expected, manualy set per device
+  const [panServoPos, setPanServoPos] = useState(94); // 0 - 180, 90 is expected, manualy set per device
   const [tiltServoPos, setTiltServoPos] = useState(89);
   const [piSocket, setPiSocket] = useState(false)
 
@@ -41,15 +41,16 @@ const Dpad = () => {
   }
 
   const updatePan = (dir) => {
+    const incrInt = parseInt(increment);
     if (dir === 'left') {
-      if (panServoPos - increment >= 0) {
-        setPanServoPos(panServoPos - increment);
+      if (panServoPos - incrInt >= 0) {
+        setPanServoPos(panServoPos - incrInt);
       } else {
         alert('Max range left');
       }
     } else {
-      if (panServoPos + increment <= 180) {
-        setPanServoPos(panServoPos + increment);
+      if (panServoPos + incrInt <= 180) {
+        setPanServoPos(panServoPos + incrInt);
       } else {
         alert('Max range right');
       }
@@ -57,15 +58,16 @@ const Dpad = () => {
   }
 
   const updateTilt = (dir) => {
+    const incrInt = parseInt(increment);
     if (dir === 'up') {
-      if (tiltServoPos - increment >= 0) {
-        setTiltServoPos(tiltServoPos - increment);
+      if (tiltServoPos - incrInt >= 0) {
+        setTiltServoPos(tiltServoPos - incrInt);
       } else {
         alert('Max range up');
       }
     } else {
-      if (tiltServoPos + increment <= 180) {
-        setTiltServoPos(tiltServoPos + increment);
+      if (tiltServoPos + incrInt <= 180) {
+        setTiltServoPos(tiltServoPos + incrInt);
       } else {
         alert('Max range down');
       }
