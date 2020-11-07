@@ -26,6 +26,24 @@
   - add tracking
   - add collision detection
   - add OpenCV blob finding and combine that with above for determining what to scan and plot in world
+  - add coordinate find from image and factor in offset based on camera overhead position and pivot point of sensors, general accuracy errors
+  - collect data
+    - corner wall at 45 degrees, 2ft away
+    - us
+      - 20 - won't sweep
+      - 15 - won't sweep... will have to investigate Arduino code, watch serial
+      - 10 - [39.86, 33.91, 34.12, 33.91, 33.87, 34.11, 34.25, 34.59, 34.47, 35.24, 35.68, 39.99, 41.19]
+      - 0 - [24.38, 34.18, 33.98, 34.19, 33.99, 34.29, 34.15, 34.35, 34.66, 34.89, 39.42, 39.49, 39.63]
+      - 10 - [35.44, 34.29, 34.07, 34.45, 34.08, 34.25, 34.25, 34.35, 34.81, 35.79, 39.71, 40.01, 39.86]
+      - 20 - [40.24, 34.72, 34.97, 34.5, 34.84, 34.99, 34.71, 34.82, 35.44, 39.61, 40.73, 40.45, 41.13]
+    - lidar - measurement stuck at 65533, not sure if broken or battery
+      - it was the battery, after putting in a fresh cell at 4V, was working again, it's bad as I mentioned around 2ft but I measured 38" and it was off by about 0.5"
+        vs. 2.5" or so when measuring 18" but received 20.5" as a measurement
+      - 20
+      - 10
+      - 0
+      - 10
+      - 20
 
 ### 11/04/2020
 - trying to actually get something done today
