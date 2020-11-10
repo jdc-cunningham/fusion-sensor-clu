@@ -26,7 +26,7 @@ I can't spend too much time just wanted to visually display the points below in 
 Well... this is not correct at all since I had to throw away a lot of the values and I think the mesh drawer that makes this 3d shape just joins stuff.
 If you're looking at this it's not even correct, the point(corner of wall) should face the camera.
 
-![something](repo-images\pie.PNG)
+![something](repo-images/pie.PNG)
 
 Anyway it's a a start(ain't much meme)
 
