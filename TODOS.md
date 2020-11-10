@@ -11,6 +11,25 @@
 - ### reminders
   - socket service user specified is pi to have access to smbus2
 
+### 11/10/2020
+This todo list has become more of an insanity log. An update from before, I initially was trying to learn WebGL but thankfully I found the path of Threejs.
+After doing the panic Google session and countless threejs examples/stackoverflow questions I have formulated the basis for the visual rendering.
+Earlier(few days back) I wrote the basic math functions to take the measurements coupled with the pan/tilt angles to generate the 3d coordinates... which also need to get cleaned up still.
+Anyway I am at the point now where I can make a visual representation of it in 3D to be displayed on the web.
+It's not part of the navigational system that will be all in memory but it is a nice-to-have thing. To map the world/gather data and update it based on kinematics(onboard imu).
+Mostly I needed a quick burst of "I'm not a failure" even if it's a fantasy/joke what I'm working on.
+
+I'm working with the sample coordinates mentioned below. I still have to investigate why 20+ deg tilt is ignored/cancelled... probably some dumb code in Arduino that I wrote.
+
+I can't spend too much time just wanted to visually display the points below in 3D space using Threejs.
+
+Well... this is not correct at all since I had to throw away a lot of the values and I think the mesh drawer that makes this 3d shape just joins stuff.
+If you're looking at this it's not even correct, the point(corner of wall) should face the camera.
+
+![something](repo-images\pie.PNG)
+
+Anyway it's a a start(ain't much meme)
+
 ### 11/05/2020
 - [x] look into why the angles don't match
   - due to mismatch horn lengths and the horns weren't parallel to each other from the start, only affected pan 
