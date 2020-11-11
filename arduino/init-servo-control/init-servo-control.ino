@@ -10,17 +10,27 @@
 Servo tiltServo;
 Servo panServo;
 
-int panServoPos = 104;
+int panServoPos = 94;
 int panMaxRange = 30;
 int tiltServoPos = 89;
 int tiltMaxRange = 30;
 
 String mainCmd = "";
+String secondParam = "";
 String secondCmd = "";
 String thirdCmd = "";
 String fourthCmd = "";
 
 bool isCmdProcessing = false;
+bool isFullSweepCmd = false;
+bool isFullSweepLoopProcessing = false;
+
+int fullSweepPanMin = 0;
+int fullSweepPanMax = 0;
+int fullSweepTiltMin = 0;
+int fullSweepTiltMax = 0;
+int fullSweepIncrement = 0;
+int fullSweepDelay = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -36,12 +46,10 @@ void setup() {
 void servoWrite(String servo, int pos) {
   if (servo == "pan") {
     if (pos <= (panServoPos + panMaxRange) || pos >= (panServoPos - panMaxRange)) {
-      // Serial.println("write pan");
       panServo.write(pos);
     }
   } else {
     if (pos <= (tiltServoPos + tiltMaxRange) || pos >= (tiltServoPos - tiltMaxRange)) {
-      // Serial.println("write tilt");
       tiltServo.write(pos);
     }
   }
@@ -74,18 +82,35 @@ void sweep(String servo, int increment = 2, int delayMs = 1000) {
 // these do need better names, not just incremental commands
 void resetI2cVariables() {
   mainCmd = "";
+  secondParam = "";
   secondCmd = "";
   thirdCmd = "";
   fourthCmd = "";
+  isFullSweepCmd = false;
+  fullSweepPanMin = 0;
+  fullSweepPanMax = 0;
+  fullSweepTiltMin = 0;
+  fullSweepTiltMax = 0;
+  fullSweepIncrement = 0;
+  fullSweepDelay = 0;
 }
 
 void receiveEvent(int bytes) {
-  if (isCmdProcessing) {
+  if (isCmdProcessing || isFullSweepLoopProcessing) {
     return;
   }
 
   int loopCounter = 0;
   resetI2cVariables();
+
+  // build out variables for full sweep
+  // this sucks but can't seem to just split the assembled string/char group from i2c
+  String fsPanMinRange = "";
+  String fsPanMaxRange = "";
+  String fsTiltMinRange = "";
+  String fsTiltMaxRange = "";
+  String fsIncrement = "";
+  String fsDelay = "";
 
   // the reason these values are split is because
   // if I just join them into one big string, try to parse/access by array
@@ -97,16 +122,52 @@ void receiveEvent(int bytes) {
       mainCmd = c;
     }
 
-    if (loopCounter > 1 and loopCounter < 5) { // eg. p179 or t179
-      secondCmd += c; // 001 for increment 1
+    if (loopCounter == 2) {
+      secondParam = c;
+
+      if (mainCmd == "s" && secondParam == "_") {
+        isFullSweepCmd = true;
+      }
     }
 
-    if (loopCounter == 5) { // eg. s179t || s179p
-      thirdCmd = c;
-    }
 
-    if (loopCounter > 5 && loopCounter <= 9) { // eg. s179t1000... what about 0.5 or 10000 (10 seconds)
-      fourthCmd += c;
+    if (isFullSweepCmd) {
+      // get extra params from cmd ex. s_p-020, 020_t-010, 030_1000
+      if (loopCounter > 3 && loopCounter < 8) {
+        fsPanMinRange += c;
+      }
+
+      if (loopCounter > 8 && loopCounter < 12) {
+        fsPanMaxRange += c;
+      }
+
+      if (loopCounter > 14 && loopCounter < 18) {
+        fsTiltMinRange += c;
+      }
+
+      if (loopCounter > 18 && loopCounter < 22) {
+        fsTiltMaxRange += c;
+      }
+
+      if (loopCounter > 23 && loopCounter < 27) {
+        fsIncrement += c;
+      }
+
+      if (loopCounter > 27) {
+        fsDelay += c;
+      }
+    } else {
+      if (loopCounter > 1 and loopCounter < 5) { // eg. p179 or t179
+        secondCmd += c; // 001 for increment 1
+      }
+
+      if (loopCounter == 5) { // eg. s179t || s179p
+        thirdCmd = c;
+      }
+
+      if (loopCounter > 5 && loopCounter <= 9) { // eg. s179t1000... what about 0.5 or 10000 (10 seconds)
+        fourthCmd += c;
+      }
     }
 
     loopCounter++;
@@ -128,19 +189,28 @@ void loop() {
   }
 
   if (mainCmd == "s") {
-    if (thirdCmd == "p") {
-      sweep("pan", secondCmd.toInt(), fourthCmd.toInt());
-    } else {
-      sweep("tilt", secondCmd.toInt(), fourthCmd.toInt());
-    }
+    if (secondParam != "") { // wait till determine what command
+      if (isFullSweepCmd) {
+        
+      } else {
+        if (thirdCmd == "p") {
+          sweep("pan", secondCmd.toInt(), fourthCmd.toInt());
+        } else {
+          sweep("tilt", secondCmd.toInt(), fourthCmd.toInt());
+        }
 
-    // recenter
-    isCmdProcessing = true;
-    servoWrite("pan", panServoPos);
-    isCmdProcessing = true;
-    servoWrite("tilt", tiltServoPos);
+        // recenter
+        isCmdProcessing = true;
+        servoWrite("pan", panServoPos);
+        isCmdProcessing = true;
+        servoWrite("tilt", tiltServoPos);
+      }
+    }
   }
 
-  resetI2cVariables();
+  if (!isCmdProcessing && !isFullSweepLoopProcessing) {
+    resetI2cVariables();
+  }
+
   delay(100);
 }
