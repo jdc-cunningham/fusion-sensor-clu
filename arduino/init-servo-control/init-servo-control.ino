@@ -10,7 +10,7 @@
 Servo tiltServo;
 Servo panServo;
 
-int panServoPos = 94;
+int panServoPos = 99;
 int panMaxRange = 30;
 int tiltServoPos = 89;
 int tiltMaxRange = 30;
@@ -25,12 +25,14 @@ bool isCmdProcessing = false;
 bool isFullSweepCmd = false;
 bool isFullSweepLoopProcessing = false;
 
-int fullSweepPanMin = 0;
-int fullSweepPanMax = 0;
-int fullSweepTiltMin = 0;
-int fullSweepTiltMax = 0;
-int fullSweepIncrement = 0;
-int fullSweepDelay = 0;
+// build out variables for full sweep
+// this sucks but can't seem to just split the assembled string/char group from i2c
+String fsPanMinRange = "";
+String fsPanMaxRange = "";
+String fsTiltMinRange = "";
+String fsTiltMaxRange = "";
+String fsIncrement = "";
+String fsDelay = "";
 
 void setup() {
   Serial.begin(9600);
@@ -58,11 +60,17 @@ void servoWrite(String servo, int pos) {
 }
 
 // delayMs set to 0 due to base delay of 1s per servo motion
-void sweep(String servo, int increment = 2, int delayMs = 1000) {
+void sweep(String servo, int increment = 2, int delayMs = 1000, int min = 0, int max = 0) { // min max normally not passed in
   bool isPanServo = servo == "pan";
   int sweepMin = isPanServo ? (panServoPos - panMaxRange) : (tiltServoPos - tiltMaxRange); // 30 is a coincidence
   int sweepMax = isPanServo ? (panServoPos + panMaxRange) : (tiltServoPos + tiltMaxRange);
 
+  if (min && max) {
+    sweepMin = isPanServo ? (panServoPos - max) : (tiltServoPos - max);
+    sweepMax = isPanServo ? (panServoPos + max) : (tiltServoPos + max);
+  }
+
+  // sign seems to be stripped
   for (int i = sweepMin; i <= sweepMax; i = i + increment) {
     isCmdProcessing = true;
 
@@ -87,12 +95,12 @@ void resetI2cVariables() {
   thirdCmd = "";
   fourthCmd = "";
   isFullSweepCmd = false;
-  fullSweepPanMin = 0;
-  fullSweepPanMax = 0;
-  fullSweepTiltMin = 0;
-  fullSweepTiltMax = 0;
-  fullSweepIncrement = 0;
-  fullSweepDelay = 0;
+  fsPanMinRange = "";
+  fsPanMaxRange = "";
+  fsTiltMinRange = "";
+  fsTiltMaxRange = "";
+  fsIncrement = "";
+  fsDelay = "";
 }
 
 void receiveEvent(int bytes) {
@@ -102,15 +110,6 @@ void receiveEvent(int bytes) {
 
   int loopCounter = 0;
   resetI2cVariables();
-
-  // build out variables for full sweep
-  // this sucks but can't seem to just split the assembled string/char group from i2c
-  String fsPanMinRange = "";
-  String fsPanMaxRange = "";
-  String fsTiltMinRange = "";
-  String fsTiltMaxRange = "";
-  String fsIncrement = "";
-  String fsDelay = "";
 
   // the reason these values are split is because
   // if I just join them into one big string, try to parse/access by array
@@ -141,7 +140,7 @@ void receiveEvent(int bytes) {
         fsPanMaxRange += c;
       }
 
-      if (loopCounter > 14 && loopCounter < 18) {
+      if (loopCounter > 13 && loopCounter < 18) {
         fsTiltMinRange += c;
       }
 
@@ -174,6 +173,27 @@ void receiveEvent(int bytes) {
   }
 }
 
+void fullSweep() {
+  // sample cmd: s_p-010,010_t-010,010_i010_500
+  // means p range is -10 to 10 deg, tilt is -10 to 10 deg, increment is 10 meaning -10, 0, 10 and servo delay is 500
+  int fsIncrementInt = fsIncrement.toInt();
+
+  for (int i = fsTiltMinRange.toInt(); i <= fsTiltMaxRange.toInt(); i = i + fsIncrementInt) {
+    servoWrite("tilt", tiltServoPos + i);
+    delay(fsIncrementInt);
+    sweep("pan", fsIncrement.toInt(), fsDelay.toInt(), fsPanMinRange.toInt(), fsPanMaxRange.toInt()); // ehh all this type conversion
+    delay(fsIncrementInt);
+    // could watch current draw on servo to see when it stops moving(drop)
+  }
+}
+
+void recenterServos() {
+  isCmdProcessing = true;
+  servoWrite("pan", panServoPos);
+  isCmdProcessing = true;
+  servoWrite("tilt", tiltServoPos);
+}
+
 void loop() {
   // this is all ugly but still in prototype stage
   if (mainCmd == "p") {
@@ -191,20 +211,19 @@ void loop() {
   if (mainCmd == "s") {
     if (secondParam != "") { // wait till determine what command
       if (isFullSweepCmd) {
-        
+        isFullSweepLoopProcessing = true;
+        fullSweep();
+        isFullSweepLoopProcessing = false;
       } else {
         if (thirdCmd == "p") {
           sweep("pan", secondCmd.toInt(), fourthCmd.toInt());
         } else {
           sweep("tilt", secondCmd.toInt(), fourthCmd.toInt());
         }
-
-        // recenter
-        isCmdProcessing = true;
-        servoWrite("pan", panServoPos);
-        isCmdProcessing = true;
-        servoWrite("tilt", tiltServoPos);
       }
+
+      // recenter
+      recenterServos();
     }
   }
 
