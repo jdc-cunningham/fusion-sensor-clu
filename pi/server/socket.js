@@ -15,12 +15,19 @@ wsServer.on('request', function(request) {
   const connection = request.accept(null, request.origin);
 
   connection.on('message', function(message) {
-    message.utf8Data
     // this shouldn't be hardcoded but depends on how installed
     // from repo as is this would be the path if cloning into /home/pi
+    const msgStr = message.utf8Data;
     const msgParts = message.utf8Data.split('_');
+
+    if (msgStr.indexOf('s_p') !== -1) {
+      // full sweep command variant
+      msgParts[0] = msgStr; // override with original cmd
+      msgParts[1] = "";
+    }
+
     const cmd = `cd /home/pi/sensor-fusion-clu/pi/cli-commands
-    python move-servo.py ${msgParts[0]} ${msgParts[1]} > pylog.txt`;
+    python move-servo.py "${msgParts[0]}" ${msgParts[1]} > pylog.txt`;
 
     exec(cmd, function (error, stdout, stderr) {
       if (error) {

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="js/three.js"></script>
+  <script src="js/OrbitControls.js"></script>
+  <script src="js/three.module.js"></script>
+  <script src="js/ConvexHull.js"></script>
+  <script src="js/ConvexGeometry.js"></script>
+  <script src="js/GetCoordinates.js"></script>
+  <script>
+    // https://threejs.org/docs/#manual/en/introduction/Creating-a-scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+
+    scene.background = new THREE.Color( 0xffffff );
+    
+    renderer.setSize(window.innerWidth, window.innerHeight); // add false for lower resolution after dividing x/y values
+    document.body.appendChild(renderer.domElement);
+
+    // add orbit controls
+    const controls = new THREE.OrbitControls( camera, renderer.domElement );
+    const axesHelper = new THREE.AxesHelper(15);
+    // const controls = new OrbitControls( camera, renderer.domElement );
+
+    // add axes helper
+    // x = red, y = green, z = blue
+    scene.add(axesHelper);
+
+    // add grid overlay
+    const size = 10;
+    const divisions = 10;
+    const gridHelper = new THREE.GridHelper(size, divisions);
+    scene.add(gridHelper);
+
+    controls.update();
+
+    function animate() {
+      requestAnimationFrame( animate );
+
+      // required if controls.enableDamping or controls.autoRotate are set to true
+      controls.update();
+      renderer.render( scene, camera );
+    }
+
+
+    // camera
+    camera.position.set( 0, 0, 100 );
+    camera.lookAt( 0, 0, 0 );
+
+    // line material
+    const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+
+    // working code
+    // vertices
+    const points = [];
+
+    // loop over physical coordinates globally accessed by previusly included script
+    coordinates.map((row, index) => {
+      row.map((measurement, rowIndex) => {
+        if (!measurement.includes(NaN) && measurement.length === 3) {
+          // add value
+          console.log(measurement)
+          points.push(new THREE.Vector3( measurement[0], measurement[1], measurement[2] ));
+
+          if (rowIndex === 2) {
+            points.push(new THREE.Vector3( measurement[0], measurement[1], measurement[2] )); // close polygon
+          }
+        }
+      });
+    });
+
+    console.log(points);
+
+    // const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    
+    // const line = new THREE.Line(geometry, material);
+
+
+    // turn points into a mesh
+    const meshGeometry = new THREE.ConvexGeometry( points ); // points = vertices array
+    const meshMaterial = new THREE.MeshBasicMaterial({
+      color: 0xcccccc,
+      transparent: true,
+      opacity: 0.6,
+      vertexColors: THREE.VertexColors,
+    });
+    const mesh = new THREE.Mesh(meshGeometry, meshMaterial);
+    // const mesh = new THREE.LineSegments(meshGeometry, meshMaterial);
+
+    // meshMaterial.transparent = true;
+    // meshMaterial.opacity = 0.5;
+
+    scene.add(mesh);
+
+    // render scene
+    renderer.render(scene, camera);
+    animate();
+  </script>
+</body>
+</html>

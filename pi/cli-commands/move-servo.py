@@ -52,11 +52,14 @@ if ("s" in servo):
   # this parsing is wrong, no two commands anymore
   # also multifunctional
   # ex cmd. s001p500 where s is for sweep, increment is 1 deg, pan servo, 500ms
-  bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + pos));
+  if ("sp" in servo):
+    bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + pos));
+  else:
+    bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo));
 
-  cmdParts = servo.split("p")
-  incr = cmdParts[0].split("s")[1]
-  delay = cmdParts[1]
-  gather_sweep_measurements(int(incr), int(delay))
+    cmdParts = servo.split("p")
+    incr = cmdParts[0].split("s")[1]
+    delay = cmdParts[1]
+    gather_sweep_measurements(int(incr), int(delay))
 else:
   bus.write_i2c_block_data(addr, 0x00, ConvertStringToBytes(servo + pos));

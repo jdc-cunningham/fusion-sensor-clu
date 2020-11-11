@@ -1,0 +1,35 @@
+.component__full-sweep {
+  display: block;
+  padding: 5px;
+  margin-top: 15px;
+
+  input {
+    max-width: 50px;
+    text-align: center;
+    margin: 0 2.5px;
+
+    &.full-sweep-delay-input {
+      max-width: 80px;
+    }
+  }
+
+  .full-sweep-title {
+    display: block;
+    width: 100%;
+    font-weight: medium;
+    font-size: 20px;
+  }
+
+  .full-sweep-wrapper-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  .full-sweep-run-btn {
+    cursor: pointer;
+  }
+}

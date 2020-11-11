@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './LeftPanel.scss';
 import StatusBar from '../../components/status-bar/StatusBar';
-import SweepSample from '../../components/data-gathering/sweep/SweepSample';
+import SweepSample from '../../components/data-gathering/sweep-sample/SweepSample';
+import FullSweep from '../../components/data-gathering/full-sweep/FullSweep';
 import axios from 'axios';
 
 const LeftPanel = () => {
@@ -81,6 +82,7 @@ const LeftPanel = () => {
         setconnection={setconnection}
       />
       <SweepSample connection={connection} />
+      <FullSweep connection={connection} />
     </div>
   );
 }

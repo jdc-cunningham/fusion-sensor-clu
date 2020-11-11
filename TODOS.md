@@ -11,8 +11,44 @@
 - ### reminders
   - socket service user specified is pi to have access to smbus2
 
+### 11/10/2020 (later)
+- [ ] make first demonstratable single-button click that results in rendered mesh on web ui
+  - [ ] web ui
+    - [x] add basic input for pan/tilt/step ranges
+    - [ ] add the render area where threejs mesh will show
+    - [ ] update websocket code that communicates down to pass the new command string
+  - [ ] threejs
+    - [ ] clean up starter threejs code so can add more to it
+    - [ ] add planned body of 2-wheeled robot with big sensor box
+  - [ ] pi side
+    - [ ] parse and send command to Arduino(maybe no change needed with current bad implementation)
+  - [ ] arduino
+    - [ ] update command parser so it can receive more data
+    - [ ] add the nested loop to do the multi-axis/range sweep
+
+### 11/10/2020
+This todo list has become more of an insanity log. An update from before, I initially was trying to learn WebGL but thankfully I found the path of Threejs.
+After doing the panic Google session and countless threejs examples/stackoverflow questions I have formulated the basis for the visual rendering.
+Earlier(few days back) I wrote the basic math functions to take the measurements coupled with the pan/tilt angles to generate the 3d coordinates... which also need to get cleaned up still.
+Anyway I am at the point now where I can make a visual representation of it in 3D to be displayed on the web.
+It's not part of the navigational system that will be all in memory but it is a nice-to-have thing. To map the world/gather data and update it based on kinematics(onboard imu).
+Mostly I needed a quick burst of "I'm not a failure" even if it's a fantasy/joke what I'm working on.
+
+I'm working with the sample coordinates mentioned below. I still have to investigate why 20+ deg tilt is ignored/cancelled... probably some dumb code in Arduino that I wrote.
+
+I can't spend too much time just wanted to visually display the points below in 3D space using Threejs.
+
+Well... this is not correct at all since I had to throw away a lot of the values and I think the mesh drawer that makes this 3d shape just joins stuff.
+If you're looking at this it's not even correct, the point(corner of wall) should face the camera.
+
+![something](repo-images/pie.PNG)
+
+Anyway it's a a start(ain't much meme)
+
 ### 11/05/2020
-- [ ] look into why the angles don't match
+- [x] look into why the angles don't match
+  - due to mismatch horn lengths and the horns weren't parallel to each other from the start, only affected pan 
+  - updated horn(extended) and updated center points
 - [ ] try simpler set of points, see if can plot a plane
 - [ ] read through webgl example code
 - [ ] full functionality eg. from web command to scan/display webgl "meshes"
@@ -26,6 +62,24 @@
   - add tracking
   - add collision detection
   - add OpenCV blob finding and combine that with above for determining what to scan and plot in world
+  - add coordinate find from image and factor in offset based on camera overhead position and pivot point of sensors, general accuracy errors
+  - collect data
+    - corner wall at 45 degrees, 2ft away
+    - us
+      - 20 - won't sweep
+      - 15 - won't sweep... will have to investigate Arduino code, watch serial
+      - 10 - [39.86, 33.91, 34.12, 33.91, 33.87, 34.11, 34.25, 34.59, 34.47, 35.24, 35.68, 39.99, 41.19]
+      - 0 - [24.38, 34.18, 33.98, 34.19, 33.99, 34.29, 34.15, 34.35, 34.66, 34.89, 39.42, 39.49, 39.63]
+      - 10 - [35.44, 34.29, 34.07, 34.45, 34.08, 34.25, 34.25, 34.35, 34.81, 35.79, 39.71, 40.01, 39.86]
+      - 20 - [40.24, 34.72, 34.97, 34.5, 34.84, 34.99, 34.71, 34.82, 35.44, 39.61, 40.73, 40.45, 41.13]
+    - lidar - measurement stuck at 65533, not sure if broken or battery
+      - it was the battery, after putting in a fresh cell at 4V, was working again, it's bad as I mentioned around 2ft but I measured 38" and it was off by about 0.5"
+        vs. 2.5" or so when measuring 18" but received 20.5" as a measurement
+      - 20
+      - 10
+      - 0
+      - 10
+      - 20
 
 ### 11/04/2020
 - trying to actually get something done today
