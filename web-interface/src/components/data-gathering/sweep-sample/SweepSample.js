@@ -7,7 +7,7 @@ const SweepSample = (props) => {
   // skipping validation for now, trying to get to fully functioning thing with plot
 
   const [increment, setIncrement] = useState(1); // deg
-  const [delay, setDelay] = useState(500); // ms units, servos have base 1s delay on Arduino side
+  const [delay, setDelay] = useState(15); // ms units, servos have base 1s delay on Arduino side
   const [servo, setServo] = useState("pan");
 
   const servoCharMap = (servo) => (servo === "pan" ? "p" : "t");
@@ -28,7 +28,6 @@ const SweepSample = (props) => {
   const sendCmd = () => {
     // cmd pattern sample: s179t1000 or s179p1000 -> sweep cmd, increment 000, servo, delay in ms
     // this pattern is terrible, I'm having to parse char individually
-    console.log(connection.socketConnected, connection.socket);
     if (connection.socketConnected) {
       const cmdStr = `s${addZeros(increment)}${servoCharMap(servo)}${delay}`;
       console.log(cmdStr);
