@@ -108,14 +108,13 @@ const FullSweep = (props) => {
       tiltSteps += 1;
     }
 
-    fullSweepDelay += panSteps * delay;
-    fullSweepDelay += tiltSteps * delay;
-    
-    // each tilt step has two delays
-    fullSweepDelay += tiltSteps * (2 * delay);
+    fullSweepDelay += tiltSteps * 2 * delay;
+    fullSweepDelay += panSteps * tiltSteps * delay;
 
     // external time seems to have extra 200ms
     fullSweepDelay += 200;
+
+    console.log('sweep delay', fullSweepDelay);
 
     return fullSweepDelay;
   }

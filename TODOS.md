@@ -23,7 +23,7 @@
 - [ ] make first demonstratable single-button click that results in rendered mesh on web ui
   - [ ] web ui
     - [x] add basic input for pan/tilt/step ranges
-    - [ ] add the render area where threejs mesh will show
+    - [x] add the render area where threejs mesh will show
     - [x] update websocket code that communicates down to pass the new command string
   - [ ] threejs
     - [ ] clean up starter threejs code so can add more to it
