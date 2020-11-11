@@ -27,6 +27,12 @@
     flex-direction: row;
     width: 100%;
     margin-top: 5px;
+
+    &.three-js {
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
   }
 
   .full-sweep-run-btn {

@@ -62,8 +62,6 @@ def parseCmdStr(cmdStr):
   tiltRanges = cmdParts[2].split("t")[1].split(",")
   incr = int(cmdParts[3].split("i")[1])
   delay = int(cmdParts[4]) / 1000
-
-  write_to_log(delay)
   
   panSteps = len(panRanges)
   panMin = int(panRanges[0])
@@ -81,25 +79,15 @@ def parseCmdStr(cmdStr):
   
   measurements = {}
 
-  write_to_log(tiltMin)
-  write_to_log(tiltMax)
-
-  write_to_log(panMin)
-  write_to_log(tiltMax)
-
   for t in range(tiltMin, (tiltMax + 1), 10):
-    write_to_log('tilt')
     time.sleep(delay/2)
     measurements[t] = []
 
     for p in range(panMin, (panMax + 1), 10):
-      write_to_log('pan')
       time.sleep(delay/2)
       measurements[t].append(usensor.get_measurement())
       
     time.sleep(delay/2)
-
-  write_to_log(json.dumps(measurements))
 
   write_to_file(json.dumps(measurements))
 

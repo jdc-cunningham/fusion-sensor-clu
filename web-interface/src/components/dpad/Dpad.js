@@ -16,7 +16,7 @@ const Dpad = () => {
   // the initial center values match what's in Arduino
 
   const [increment, setIncrement] = useState(10); // in the future can change eg. 5
-  const [panServoPos, setPanServoPos] = useState(96); // 0 - 180, 90 is expected, manualy set per device
+  const [panServoPos, setPanServoPos] = useState(94); // 0 - 180, 90 is expected, manualy set per device
   const [tiltServoPos, setTiltServoPos] = useState(89);
   const [piSocket, setPiSocket] = useState(false)
 

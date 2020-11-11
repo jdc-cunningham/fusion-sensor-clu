@@ -62,45 +62,57 @@
 
     // working code
     // vertices
-    const points = [];
+    let points = [];
 
-    // loop over physical coordinates globally accessed by previusly included script
+    // plot lines from points
     coordinates.map((row, index) => {
       row.map((measurement, rowIndex) => {
-        if (!measurement.includes(NaN) && measurement.length === 3) {
-          // add value
-          console.log(measurement)
-          points.push(new THREE.Vector3( measurement[0], measurement[1], measurement[2] ));
+        points.push(new THREE.Vector3( measurement[0], measurement[1], measurement[2] ));
+      })
 
-          if (rowIndex === 2) {
-            points.push(new THREE.Vector3( measurement[0], measurement[1], measurement[2] )); // close polygon
-          }
-        }
-      });
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+      const line = new THREE.Line( geometry, material );
+
+      scene.add(line);
+
+      points = [];
     });
 
-    console.log(points);
 
-    // const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    // loop over physical coordinates globally accessed by previusly included script
+    // coordinates.map((row, index) => {
+    //   row.map((measurement, rowIndex) => {
+    //     if (!measurement.includes(NaN) && measurement.length === 3) {
+    //       // add value
+    //       console.log(measurement)
+    //       points.push(new THREE.Vector3( measurement[0], measurement[1], measurement[2] ));
+
+    //       if (rowIndex === 2) {
+    //         points.push(new THREE.Vector3( measurement[0], measurement[1], measurement[2] )); // close polygon
+    //       }
+    //     }
+    //   });
+    // });
     
     // const line = new THREE.Line(geometry, material);
 
 
     // turn points into a mesh
-    const meshGeometry = new THREE.ConvexGeometry( points ); // points = vertices array
-    const meshMaterial = new THREE.MeshBasicMaterial({
-      color: 0xcccccc,
-      transparent: true,
-      opacity: 0.6,
-      vertexColors: THREE.VertexColors,
-    });
-    const mesh = new THREE.Mesh(meshGeometry, meshMaterial);
-    // const mesh = new THREE.LineSegments(meshGeometry, meshMaterial);
+    // const meshGeometry = new THREE.ConvexGeometry( points ); // points = vertices array
+    // const meshMaterial = new THREE.MeshBasicMaterial({
+    //   color: 0xcccccc,
+    //   transparent: true,
+    //   opacity: 0.6,
+    //   vertexColors: THREE.VertexColors,
+    // });
+    // const mesh = new THREE.Mesh(meshGeometry, meshMaterial);
+    // const mesh = new THREE.LineSegments(geometry, meshMaterial);
 
     // meshMaterial.transparent = true;
     // meshMaterial.opacity = 0.5;
 
-    scene.add(mesh);
+    // scene.add(mesh);
 
     // render scene
     renderer.render(scene, camera);

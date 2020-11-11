@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ThreeJsVisualizer from '../../three-js-visualizer/ThreeJsVisualizer.js';
 import './FullSweep.scss';
+import axios from 'axios';
 
 const FullSweep = (props) => {
 
@@ -14,19 +15,22 @@ const FullSweep = (props) => {
     max: 10
   });
   const [increment, setIncrement] = useState(10);
-  const [meshValues, setMeshValues] = useState(false);
+  const [coordinates, setCoordinates] = useState(null);
   const [inProgress, setInProgress] = useState(false);
   const [delay, setDelay] = useState(500); // default is 0.5sec
+  // this renders a button to directly call the coordiantes json file
+  const [requestData, setRequestData] = useState(false);
 
   const handleValueUpdate = (field, newValue, which) => {
-    console.log(newValue);
     if (field === 'pan') {
       if (which === 'min') {
         setPanRanges((prevState) => ({
+          ...prevState,
           min: newValue,
         }));
       } else {
         setPanRanges((prevState) => ({
+          ...prevState,
           max: newValue,
         }));
       }
@@ -35,10 +39,12 @@ const FullSweep = (props) => {
     if (field === 'tilt') {
       if (which === 'min') {
         setTiltRanges((prevState) => ({
+          ...prevState,
           min: newValue,
         }));
       } else {
         setTiltRanges((prevState) => ({
+          ...prevState,
           max: newValue,
         }));
       }
@@ -80,9 +86,50 @@ const FullSweep = (props) => {
     if (socketConnected) {
       // space is for sign
       const cmdStr = `s_p${addZeros(panRanges.min)},${addZeros(panRanges.max)}_t${addZeros(tiltRanges.min)},${addZeros(tiltRanges.max)}_i${addZeros(increment)}_${delay}`;
-      console.log(cmdStr);
       socket.send(cmdStr)
     }
+  }
+
+  const calcFullSweepDelay = () => {
+    // 100 ms for main loop
+    // per loop in fullSweep
+    // tilt has delay set
+    // every sweep command has a delay, sweep is based on min/max range by increment
+    // last delay before loop begins again
+    // ex case of -10, 10, -10, 10, 10 incr, 500 ms
+    let fullSweepDelay = 100; // bare min has 100ms
+    let panSteps = ((-1 * (panRanges.min - panRanges.max)) / increment);
+    if (panRanges.min < 0) {
+      panSteps += 1; // since 0 is a step
+    }
+
+    let tiltSteps = ((-1 * (tiltRanges.min - tiltRanges.max)) / increment);
+    if (tiltRanges.min < 0) {
+      tiltSteps += 1;
+    }
+
+    fullSweepDelay += panSteps * delay;
+    fullSweepDelay += tiltSteps * delay;
+    
+    // each tilt step has two delays
+    fullSweepDelay += tiltSteps * (2 * delay);
+
+    // external time seems to have extra 200ms
+    fullSweepDelay += 200;
+
+    return fullSweepDelay;
+  }
+
+  // get values
+  const getCoordinates = () => {
+    axios.get(process.env.REACT_APP_PI_MEASURED_COORDINATES)
+      .then((res) => {
+        setCoordinates(res.data);
+      })
+      .catch((err) => {
+        alert('failed to get coordinates');
+        setRequestData(true);
+      });
   }
 
   const generateMesh = () => {
@@ -107,6 +154,19 @@ const FullSweep = (props) => {
     // determine delay to wait and set timeout then call cmd
 
     sendCmd();
+
+    const fullSweepDelay = calcFullSweepDelay();
+
+    setTimeout(() => {
+      setInProgress(false);
+      getCoordinates();
+    }, fullSweepDelay);
+
+    // yeah this is not reliable at all, with the commm delay as well
+  }
+
+  const resetFullSweep = () => {
+    setCoordinates(null);
   }
 
   return (
@@ -137,12 +197,16 @@ const FullSweep = (props) => {
           <input className="full-sweep-delay-input" type="number" min="1" value={delay}
             onChange={(e) => handleValueUpdate('delay', e.target.value)} />
         </span>
-        <span className="full-sweep-wrapper-row">
+        <span className="full-sweep-wrapper-row three-js">
           {
-            !meshValues ? <button className="full-sweep-run-btn" type="button"
+            !coordinates ? <button className="full-sweep-run-btn" type="button"
               disabled={!socketConnected || inProgress}
               onClick={ () => generateMesh() }>Run sweep</button>
-              : <ThreeJsVisualizer values={meshValues} />
+              :
+              <>
+                <ThreeJsVisualizer coordinates={coordinates} />
+                <button type="button" onClick={ () => resetFullSweep() }>Reset</button>
+              </>
           }
         </span>
       </div>
