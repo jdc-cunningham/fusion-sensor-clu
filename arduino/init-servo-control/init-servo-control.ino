@@ -10,7 +10,7 @@
 Servo tiltServo;
 Servo panServo;
 
-int panServoPos = 99;
+int panServoPos = 94;
 int panMaxRange = 30;
 int tiltServoPos = 89;
 int tiltMaxRange = 30;
@@ -104,6 +104,7 @@ void resetI2cVariables() {
 }
 
 void receiveEvent(int bytes) {
+  Serial.println("receive");
   if (isCmdProcessing || isFullSweepLoopProcessing) {
     return;
   }
