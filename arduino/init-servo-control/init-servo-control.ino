@@ -213,6 +213,7 @@ void loop() {
       if (isFullSweepCmd) {
         isFullSweepLoopProcessing = true;
         fullSweep();
+        recenterServos();
         isFullSweepLoopProcessing = false;
       } else {
         if (thirdCmd == "p") {
@@ -220,10 +221,8 @@ void loop() {
         } else {
           sweep("tilt", secondCmd.toInt(), fourthCmd.toInt());
         }
+        recenterServos();
       }
-
-      // recenter
-      recenterServos();
     }
   }
 
