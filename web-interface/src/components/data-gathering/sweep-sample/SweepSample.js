@@ -44,20 +44,23 @@ const SweepSample = (props) => {
 
   return (
     <div className="component__sweep-sample">
-      <button
-        className="sweep-sample-btn"
-        disabled={ !connection.socketConnected }
-        onClick={() => sendCmd()}>Run Sweep</button>
-      <p>select servo</p>
-      <select onChange={ (e) => setServo(e.target.value) } value={servo}>
-        <option value="pan">pan</option>
-        <option value="tilt">tilt</option>
-      </select>
-      <p>increment</p>
-      <input type="number" value={increment} min="1" onChange={ (e) => setIncrement(e.target.value) }/>
-      <p>(deg) delay</p>
-      <input type="number" value={delay} min="1" onChange={ (e) => setDelay(e.target.value) } className="sweep-sample-delay"/>
-      <p>(ms)</p>
+      <h2 className="sweep-sample-title">Manual sweep sample</h2>
+      <div className="sweep-sample-wrapper">
+        <button
+          className="sweep-sample-btn"
+          disabled={ !connection.socketConnected }
+          onClick={() => sendCmd()}>Run Sweep</button>
+        <p>select servo</p>
+        <select onChange={ (e) => setServo(e.target.value) } value={servo}>
+          <option value="pan">pan</option>
+          <option value="tilt">tilt</option>
+        </select>
+        <p>increment</p>
+        <input type="number" value={increment} min="1" onChange={ (e) => setIncrement(e.target.value) }/>
+        <p>(deg) delay</p>
+        <input type="number" value={delay} min="1" onChange={ (e) => setDelay(e.target.value) } className="sweep-sample-delay"/>
+        <p>(ms)</p>
+      </div>
     </div>
   );
 }

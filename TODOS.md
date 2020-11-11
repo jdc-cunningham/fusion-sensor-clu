@@ -11,6 +11,21 @@
 - ### reminders
   - socket service user specified is pi to have access to smbus2
 
+### 11/10/2020 (later)
+- [ ] make first demonstratable single-button click that results in rendered mesh on web ui
+  - [ ] web ui
+    - [x] add basic input for pan/tilt/step ranges
+    - [ ] add the render area where threejs mesh will show
+    - [ ] update websocket code that communicates down to pass the new command string
+  - [ ] threejs
+    - [ ] clean up starter threejs code so can add more to it
+    - [ ] add planned body of 2-wheeled robot with big sensor box
+  - [ ] pi side
+    - [ ] parse and send command to Arduino(maybe no change needed with current bad implementation)
+  - [ ] arduino
+    - [ ] update command parser so it can receive more data
+    - [ ] add the nested loop to do the multi-axis/range sweep
+
 ### 11/10/2020
 This todo list has become more of an insanity log. An update from before, I initially was trying to learn WebGL but thankfully I found the path of Threejs.
 After doing the panic Google session and countless threejs examples/stackoverflow questions I have formulated the basis for the visual rendering.
