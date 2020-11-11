@@ -10,17 +10,29 @@
 Servo tiltServo;
 Servo panServo;
 
-int panServoPos = 94;
+int panServoPos = 99;
 int panMaxRange = 30;
 int tiltServoPos = 89;
 int tiltMaxRange = 30;
 
 String mainCmd = "";
+String secondParam = "";
 String secondCmd = "";
 String thirdCmd = "";
 String fourthCmd = "";
 
 bool isCmdProcessing = false;
+bool isFullSweepCmd = false;
+bool isFullSweepLoopProcessing = false;
+
+// build out variables for full sweep
+// this sucks but can't seem to just split the assembled string/char group from i2c
+String fsPanMinRange = "";
+String fsPanMaxRange = "";
+String fsTiltMinRange = "";
+String fsTiltMaxRange = "";
+String fsIncrement = "";
+String fsDelay = "";
 
 void setup() {
   Serial.begin(9600);
@@ -36,12 +48,10 @@ void setup() {
 void servoWrite(String servo, int pos) {
   if (servo == "pan") {
     if (pos <= (panServoPos + panMaxRange) || pos >= (panServoPos - panMaxRange)) {
-      // Serial.println("write pan");
       panServo.write(pos);
     }
   } else {
     if (pos <= (tiltServoPos + tiltMaxRange) || pos >= (tiltServoPos - tiltMaxRange)) {
-      // Serial.println("write tilt");
       tiltServo.write(pos);
     }
   }
@@ -50,11 +60,17 @@ void servoWrite(String servo, int pos) {
 }
 
 // delayMs set to 0 due to base delay of 1s per servo motion
-void sweep(String servo, int increment = 2, int delayMs = 1000) {
+void sweep(String servo, int increment = 2, int delayMs = 1000, int min = 0, int max = 0) { // min max normally not passed in
   bool isPanServo = servo == "pan";
   int sweepMin = isPanServo ? (panServoPos - panMaxRange) : (tiltServoPos - tiltMaxRange); // 30 is a coincidence
   int sweepMax = isPanServo ? (panServoPos + panMaxRange) : (tiltServoPos + tiltMaxRange);
 
+  if (min && max) {
+    sweepMin = isPanServo ? (panServoPos - max) : (tiltServoPos - max);
+    sweepMax = isPanServo ? (panServoPos + max) : (tiltServoPos + max);
+  }
+
+  // sign seems to be stripped
   for (int i = sweepMin; i <= sweepMax; i = i + increment) {
     isCmdProcessing = true;
 
@@ -74,13 +90,21 @@ void sweep(String servo, int increment = 2, int delayMs = 1000) {
 // these do need better names, not just incremental commands
 void resetI2cVariables() {
   mainCmd = "";
+  secondParam = "";
   secondCmd = "";
   thirdCmd = "";
   fourthCmd = "";
+  isFullSweepCmd = false;
+  fsPanMinRange = "";
+  fsPanMaxRange = "";
+  fsTiltMinRange = "";
+  fsTiltMaxRange = "";
+  fsIncrement = "";
+  fsDelay = "";
 }
 
 void receiveEvent(int bytes) {
-  if (isCmdProcessing) {
+  if (isCmdProcessing || isFullSweepLoopProcessing) {
     return;
   }
 
@@ -97,20 +121,77 @@ void receiveEvent(int bytes) {
       mainCmd = c;
     }
 
-    if (loopCounter > 1 and loopCounter < 5) { // eg. p179 or t179
-      secondCmd += c; // 001 for increment 1
+    if (loopCounter == 2) {
+      secondParam = c;
+
+      if (mainCmd == "s" && secondParam == "_") {
+        isFullSweepCmd = true;
+      }
     }
 
-    if (loopCounter == 5) { // eg. s179t || s179p
-      thirdCmd = c;
-    }
 
-    if (loopCounter > 5 && loopCounter <= 9) { // eg. s179t1000... what about 0.5 or 10000 (10 seconds)
-      fourthCmd += c;
+    if (isFullSweepCmd) {
+      // get extra params from cmd ex. s_p-020, 020_t-010, 030_1000
+      if (loopCounter > 3 && loopCounter < 8) {
+        fsPanMinRange += c;
+      }
+
+      if (loopCounter > 8 && loopCounter < 12) {
+        fsPanMaxRange += c;
+      }
+
+      if (loopCounter > 13 && loopCounter < 18) {
+        fsTiltMinRange += c;
+      }
+
+      if (loopCounter > 18 && loopCounter < 22) {
+        fsTiltMaxRange += c;
+      }
+
+      if (loopCounter > 23 && loopCounter < 27) {
+        fsIncrement += c;
+      }
+
+      if (loopCounter > 27) {
+        fsDelay += c;
+      }
+    } else {
+      if (loopCounter > 1 and loopCounter < 5) { // eg. p179 or t179
+        secondCmd += c; // 001 for increment 1
+      }
+
+      if (loopCounter == 5) { // eg. s179t || s179p
+        thirdCmd = c;
+      }
+
+      if (loopCounter > 5 && loopCounter <= 9) { // eg. s179t1000... what about 0.5 or 10000 (10 seconds)
+        fourthCmd += c;
+      }
     }
 
     loopCounter++;
   }
+}
+
+void fullSweep() {
+  // sample cmd: s_p-010,010_t-010,010_i010_500
+  // means p range is -10 to 10 deg, tilt is -10 to 10 deg, increment is 10 meaning -10, 0, 10 and servo delay is 500
+  int fsIncrementInt = fsIncrement.toInt();
+
+  for (int i = fsTiltMinRange.toInt(); i <= fsTiltMaxRange.toInt(); i = i + fsIncrementInt) {
+    servoWrite("tilt", tiltServoPos + i);
+    delay(fsIncrementInt);
+    sweep("pan", fsIncrement.toInt(), fsDelay.toInt(), fsPanMinRange.toInt(), fsPanMaxRange.toInt()); // ehh all this type conversion
+    delay(fsIncrementInt);
+    // could watch current draw on servo to see when it stops moving(drop)
+  }
+}
+
+void recenterServos() {
+  isCmdProcessing = true;
+  servoWrite("pan", panServoPos);
+  isCmdProcessing = true;
+  servoWrite("tilt", tiltServoPos);
 }
 
 void loop() {
@@ -128,19 +209,26 @@ void loop() {
   }
 
   if (mainCmd == "s") {
-    if (thirdCmd == "p") {
-      sweep("pan", secondCmd.toInt(), fourthCmd.toInt());
-    } else {
-      sweep("tilt", secondCmd.toInt(), fourthCmd.toInt());
+    if (secondParam != "") { // wait till determine what command
+      if (isFullSweepCmd) {
+        isFullSweepLoopProcessing = true;
+        fullSweep();
+        recenterServos();
+        isFullSweepLoopProcessing = false;
+      } else {
+        if (thirdCmd == "p") {
+          sweep("pan", secondCmd.toInt(), fourthCmd.toInt());
+        } else {
+          sweep("tilt", secondCmd.toInt(), fourthCmd.toInt());
+        }
+        recenterServos();
+      }
     }
-
-    // recenter
-    isCmdProcessing = true;
-    servoWrite("pan", panServoPos);
-    isCmdProcessing = true;
-    servoWrite("tilt", tiltServoPos);
   }
 
-  resetI2cVariables();
+  if (!isCmdProcessing && !isFullSweepLoopProcessing) {
+    resetI2cVariables();
+  }
+
   delay(100);
 }
