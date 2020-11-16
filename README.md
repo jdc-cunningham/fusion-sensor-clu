@@ -33,6 +33,10 @@ The Pi hosts a webserver and socket(don't really need both). The commands from t
 
 ## Status
 
+### 11-12-2020
+I have written a basic pan/tilt measurement sampling workflow which is then plotted in 3D using ThreeJS. The implementation is basic right now as I have to finish figuring out the math aspect/rendering it correctly.
+[![youtube video of web interface to threejs](repo-images/yt2.PNG)](https://www.youtube.com/watch?v=VOdi__m6o3g)
+
 ### 10-28-2020
 At this time this project is far from complete. This is also not really meant to be reproduced, it has a lot of flaws.
 

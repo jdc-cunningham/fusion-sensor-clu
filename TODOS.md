@@ -11,6 +11,11 @@
 - ### reminders
   - socket service user specified is pi to have access to smbus2
 
+- ### "Geometric error"
+This is due to the sensors rotating about an offset shared central axis particularly for pitch
+Pan has its own problems(since the sensor emit/return are not on the same point/axis)
+
+
 ### Next
 - [ ] add background task to Arduino code to unblock itself
 - [ ] add reset btn on ui/feed to Arduino
@@ -18,6 +23,11 @@
     left to true
 - [ ] fix issue with rerender on input after threejs has rendered once
 - [ ] fix math and update plotting for threejs/add toggles
+- [ ] add led lidar
+  - test it
+  - add as secondary check to confirm measurements
+    usensor bad on corners facing away from sensor
+
 
 ### 11/10/2020 (later)
 - [ ] make first demonstratable single-button click that results in rendered mesh on web ui
