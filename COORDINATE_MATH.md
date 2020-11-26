@@ -54,3 +54,16 @@ Having problems again with full sweep ignoring delays
 
 Ughh... I did this wrong. I'm just connecting rows of dots not the four corners of a square, I'm missing some steps
 
+Groupoo
+
+I'm not great at math so this is a struggle... how do you slice a matrix into quadrants by nearby four points?
+
+What happens if I just plot all these points as is?
+
+Oh man... I'm lucky joins the planes for you... need an irregular shape sample though to confirm
+
+![plotty-boi](./repo-images/plot-threejs.PNG)
+
+I just realized I may be underpowering the Arduino since the power is setup as a Y-feed from the step up converter. I measured the Vin rails of the Arduino and it's only 4.9V from the 5V source shared by the Pi... docs say it's supposed to be 7-12V hmm... wondering if that's related to the ureliable timer.
+
+I may have to rework this. Something ugly like step up to 7V, parallel feed to Arduino Vin and linear regulator down to 5V to Pi... ehh that sucks.

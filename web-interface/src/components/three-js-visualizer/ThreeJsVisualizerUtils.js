@@ -1,4 +1,4 @@
-const generateMeshCoordinates = (cluMeasurements, increment) => {
+const generateMeshCoordinates = (cluMeasurements) => {
   // coordinate system is x, y, z where z faces user
 
   // sweep goes from top-left to top-right
@@ -47,21 +47,18 @@ const generateMeshCoordinates = (cluMeasurements, increment) => {
 
   const getZCoordinate = (sweepAngle, distance) => {
     const distanceRadians = degreesToRadians(Math.abs(parseInt(sweepAngle)));
-    return parseFloat((distance * Math.cos(distanceRadians)).toFixed(2));
+    return -1 * parseFloat((distance * Math.cos(distanceRadians)).toFixed(2));
   }
 
   // end result would be a plottable plane
   // @param {object} cluSensorMEeasurements - object with tilt angle as key and
   // array of sweep sample ToF measurements
-  // @param {int} increment - increment angle, should match tilt
-  const getCoordinates = (cluSensorMeasurements, increment) => {
+  const getCoordinates = (cluSensorMeasurements) => {
     const meshCoordinateSets = {}; // use object to force order
     const sweepAngles = Array.from(Object.keys(cluSensorMeasurements).map(tiltAngle => parseInt(tiltAngle))).sort();
     
     Object.keys(cluSensorMeasurements).forEach((tilt) => {
-      const tiltAngle = parseInt(tilt);
       const sweepMeasurements = cluSensorMeasurements[tilt];
-      const sweepMidpointValue = (Math.floor(sweepMeasurements.length/2));
       const innerMeshSet = [];
       
       sweepMeasurements.forEach((measurement, index) => {
@@ -72,13 +69,13 @@ const generateMeshCoordinates = (cluMeasurements, increment) => {
         ]);
       });
       
-      meshCoordinateSets[tilt] = [...innerMeshSet, [...innerMeshSet[0]]]; // first copy closes mesh
+      meshCoordinateSets[tilt] = [...innerMeshSet];
     });
     
     return meshCoordinateSets;
   }
 
-  getCoordinates(cluMeasurements, increment);
+  return getCoordinates(cluMeasurements);
 }
 
 export default generateMeshCoordinates;

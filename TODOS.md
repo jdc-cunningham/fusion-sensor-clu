@@ -48,9 +48,14 @@ Well... been busy lately, now have some free time, fresh brain. I had lost inter
     sitting "idle"
     3.641V at 11:36 AM
     3.522V at 12:49 PM
+    3.301V at 2:13 PM
 - [ ] finish function that takes in parameters `(distance, sweep, tilt, increment)` and returns the coordinate pairs for the vertices to make the "plane" or polygon
   - pan pattern starts top left then goes to top-right
   - [when your meager brain cells collect into a pool and somehow establish thought](https://www.youtube.com/watch?v=ZeFonavUHTg)
+  ![basic trig](./repo-images/trig-boi.PNG)
+  I prototyped out the code to generate the points but  I'm still missing the groupings to generate the mesh/planes
+  ![proto-scopo](./repo-images/protype.PNG)
+  seems I have to reset the Arduino if the delays are ignored...
 - [ ] start on OpenCV side that scans an image for color groups and then aims the sensor in those directions to get a sample... perhaps can find the corners in a simple case and create approximations(planes) at the appropriate distances
   - so many of the OpenCV tutorials online literally just code out what are in the docs... it's like "we're going to find the red cup" wow! Amazing... every freaking video man.
     it's like, no, I need to be able to find a dynamic range of unknown colors, how do I do that?

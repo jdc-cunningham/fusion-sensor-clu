@@ -5,13 +5,16 @@ import generateMeshCoordinates from './ThreeJsVisualizerUtils.js';
 const ThreeJsVisualizer = (props) => {
   const { coordinates } = props;
 
-  const renderThreeJs = (threejsCoordinates) => {
+  const renderThreeJs = (threeJsCoordinates) => {
     const THREE = window.THREE;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
 
     scene.background = new THREE.Color( 0xffffff );
+
+    // terrible non-react use a ref or other way to clear dom
+    document.getElementById('threejs-container').innerHTML = '';
     
     renderer.setSize(window.innerWidth, window.innerHeight); // add false for lower resolution after dividing x/y values
     document.getElementById('threejs-container').appendChild(renderer.domElement);
@@ -19,7 +22,6 @@ const ThreeJsVisualizer = (props) => {
     // add orbit controls
     const controls = new THREE.OrbitControls( camera, renderer.domElement );
     const axesHelper = new THREE.AxesHelper(15);
-    // const controls = new OrbitControls( camera, renderer.domElement );
 
     // add axes helper
     // x = red, y = green, z = blue
@@ -52,45 +54,33 @@ const ThreeJsVisualizer = (props) => {
     // vertices
     let points = [];
 
-    // plot lines from points
-    threejsCoordinates["10"].map((row, index) => { // tmp
-      row.map((measurement, rowIndex) => {
-        points.push(new THREE.Vector3( measurement[0], measurement[1], measurement[2] ));
-      })
+    // sort by tilt angle
+    const tiltAngles = [];
 
-      const geometry = new THREE.BufferGeometry().setFromPoints(points);
-
-      const line = new THREE.Line( geometry, material );
-
-      scene.add(line);
-
-      points = [];
+    Object.keys(threeJsCoordinates).forEach((tilt) => {
+      tiltAngles.push(parseInt(tilt));
     });
+
+    tiltAngles.sort();
+
+    tiltAngles.forEach((tilt) => {
+      threeJsCoordinates[tilt].forEach((xyzCoordinates) => {
+        console.log(xyzCoordinates);
+        points.push(new THREE.Vector3(xyzCoordinates[0], xyzCoordinates[1], xyzCoordinates[2]));
+      });
+    });
+
+    const meshGeometry = new THREE.ConvexGeometry( points ); // points = vertices array
+    const mesh = new THREE.Mesh(meshGeometry, material);
+    scene.add(mesh);
+    points = [];
 
     renderer.render(scene, camera);
     animate();
   }
 
   useEffect(() => {
-    console.log(coordinates);
-    const coordinatesArr = Object.keys(coordinates).map(key => coordinates[key]);
-    // const threejsCoordinates = coordinatesArr.map((row, index) => {
-    //   return row.map((measurement, rowIndex) => get3dCoordinates(
-    //     angleMap[index],
-    //     angleMap[rowIndex],
-    //     measurement,
-    //      index > 1,
-    //   ));
-    // });
-
-    // const threeJsCoordinates = generateMeshCoordinates(coordinates, 10);
-
-    const threeJsCoordinates = generateMeshCoordinates({
-      "10": [22.67, 22.34, 22.67],
-      "0": [22.34, 22, 22.34],
-      "-10": [22.67, 22.34, 22.67]
-    }, 10);
-
+    const threeJsCoordinates = generateMeshCoordinates(coordinates); // 10 has to come from UI
     renderThreeJs(threeJsCoordinates);
   });
 
