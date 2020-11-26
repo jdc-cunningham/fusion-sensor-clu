@@ -33,7 +33,6 @@ def get_cli_args(name='default', first='servo', second='position'):
   return first, second
 
 # intent is to write plain strings or json
-# systemd specifies pi user has ownernship can write to node hosted file
 def write_to_file(str):
   f = open("/home/pi/sensor-fusion-clu/pi/server/coordinates/values.json", "w+")
   f.write(str)
@@ -62,7 +61,6 @@ def parseCmdStr(cmdStr):
   tiltRanges = cmdParts[2].split("t")[1].split(",")
   incr = int(cmdParts[3].split("i")[1])
   delay = int(cmdParts[4]) / 1000
-  
   panSteps = len(panRanges)
   panMin = int(panRanges[0])
   panMax = int(panRanges[1])
@@ -101,6 +99,13 @@ def get_full_sweep_measurements(servo):
     parseCmdStr(servo)
 
 servo, pos = get_cli_args(*sys.argv)
+
+# don't send undefined to Arduino
+if (servo == "undefined"):
+  servo = ""
+
+if (pos == "undefined"):
+  pos = ""
 
 # generally a cmd string should just get sent down, but possible need to do loop/long measurement
 if ("s" in servo):

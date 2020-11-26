@@ -86,6 +86,7 @@ const FullSweep = (props) => {
     if (socketConnected) {
       // space is for sign
       const cmdStr = `s_p${addZeros(panRanges.min)},${addZeros(panRanges.max)}_t${addZeros(tiltRanges.min)},${addZeros(tiltRanges.max)}_i${addZeros(increment)}_${delay}`;
+      console.log(cmdStr);
       socket.send(cmdStr)
     }
   }

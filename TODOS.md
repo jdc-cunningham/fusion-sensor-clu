@@ -28,6 +28,27 @@ Pan has its own problems(since the sensor emit/return are not on the same point/
   - add as secondary check to confirm measurements
     usensor bad on corners facing away from sensor
 
+### 11/26/2020
+Well... been busy lately, now have some free time, fresh brain. I had lost interest somewhat, there is still a bit of work to do.
+
+- [x] sweep command stopped working(no change but updated Python cmd string send to Arduino)
+  - weird, logged the command ex. `s_p-010,010_t-010,010_i010_500` seems the delay is ignored, sweep sample still works
+    not sure if problem is on command part or on Arduino side, no sweep sample is also broken/ignoring the delays
+    I will see if reflashing the Arduino code will help(why)
+    Oohh look at him, hackerman
+    ![hackerman](./repo-images/hackerman.PNG);
+    I do love this giant monitor though, look at me ma! I can SSH
+    Anyway I'm adding logging back into the Arduino code to see if it's parsing all the command string characters
+    Well it's working again... not sure if the serial print had anything to do with it but the sweep sample while it works has undefined at the end of it... probably a CLI args read issue, but it doesn't seem to affect it so... ugh... I'll fix it. I have to modify either the nodejs code or python code and then reload the systemd service on the Pi.
+    Sidenote the Surfacebook is a cumbersome device due to it being top-heavy(tablet is heavier than keyboard). I also have this anxiety about both batteries matching percentages. Still I remember holding one of the first Surface tablets in my hand like 10 years ago... way out of my budget, got this one used. It's cool but I have not really used it yet regarding the tablet aspect.
+    so it was literally sending the string "undefined" from node to Arduino... I acknowledge this code is trash
+    Anyway I'll remove the serial monitor logs and see if the sweep stuff still works
+    One thing I have to do is estimate current consumption, just doing a "started at this voltage, ended with this after x hours", not really sure if that's considered current consumption but I can at least gauge approximate lifespan from 1, 18650 3.4Ah cells.
+    ![madness](./repo-images/chaos-in-the-brain-let-the-bloodflow.png)
+- [ ] finish function that takes in parameters `(distance, sweep, tilt, increment)` and returns the coordinate pairs for the vertices to make the "plane" or polygon
+- [ ] start on OpenCV side that scans an image for color groups and then aims the sensor in those directions to get a sample... perhaps can find the corners in a simple case and create approximations(planes) at the appropriate distances
+- [ ] add "connecting..." ajax spinner to status indicators
+- [ ] fix the reset/remove ThreeJS canvas issue
 
 ### 11/10/2020 (later)
 - [ ] make first demonstratable single-button click that results in rendered mesh on web ui
