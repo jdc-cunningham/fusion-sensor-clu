@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import './ThreeJsVisualizer.scss';
+import generateMeshCoordinates from './ThreeJsVisualizerUtils.js';
 
 const ThreeJsVisualizer = (props) => {
   const { coordinates } = props;
 
-  const renderThreejs = (threejsCoordinates) => {
+  const renderThreeJs = (threejsCoordinates) => {
     const THREE = window.THREE;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -52,7 +53,7 @@ const ThreeJsVisualizer = (props) => {
     let points = [];
 
     // plot lines from points
-    threejsCoordinates.map((row, index) => {
+    threejsCoordinates["10"].map((row, index) => { // tmp
       row.map((measurement, rowIndex) => {
         points.push(new THREE.Vector3( measurement[0], measurement[1], measurement[2] ));
       })
@@ -70,33 +71,27 @@ const ThreeJsVisualizer = (props) => {
     animate();
   }
 
-  const get3dCoordinates = (inclineAngle, sweepAngle, measurement, flip) => {
-    const xCoord = measurement * Math.sin(sweepAngle);
-    const yCoord = inclineAngle === 0 ? 0 : (measurement * Math.cos(inclineAngle) * (flip ? -1 : 1));
-    const zCoord = measurement * Math.cos(sweepAngle);
-    return [xCoord, yCoord, zCoord];
-  };
-
-  const angleMap = [
-    -10,
-    0,
-    10,
-  ];
-
   useEffect(() => {
     console.log(coordinates);
     const coordinatesArr = Object.keys(coordinates).map(key => coordinates[key]);
-    const threejsCoordinates = coordinatesArr.map((row, index) => {
-      console.log(row);
-      return row.map((measurement, rowIndex) => get3dCoordinates(
-        angleMap[index],
-        angleMap[rowIndex],
-        measurement,
-         index > 1,
-      ));
-    });
+    // const threejsCoordinates = coordinatesArr.map((row, index) => {
+    //   return row.map((measurement, rowIndex) => get3dCoordinates(
+    //     angleMap[index],
+    //     angleMap[rowIndex],
+    //     measurement,
+    //      index > 1,
+    //   ));
+    // });
 
-    renderThreejs(threejsCoordinates);
+    // const threeJsCoordinates = generateMeshCoordinates(coordinates, 10);
+
+    const threeJsCoordinates = generateMeshCoordinates({
+      "10": [22.67, 22.34, 22.67],
+      "0": [22.34, 22, 22.34],
+      "-10": [22.67, 22.34, 22.67]
+    }, 10);
+
+    renderThreeJs(threeJsCoordinates);
   });
 
   return (

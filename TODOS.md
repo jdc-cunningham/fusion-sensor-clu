@@ -45,8 +45,17 @@ Well... been busy lately, now have some free time, fresh brain. I had lost inter
     Anyway I'll remove the serial monitor logs and see if the sweep stuff still works
     One thing I have to do is estimate current consumption, just doing a "started at this voltage, ended with this after x hours", not really sure if that's considered current consumption but I can at least gauge approximate lifespan from 1, 18650 3.4Ah cells.
     ![madness](./repo-images/chaos-in-the-brain-let-the-bloodflow.png)
+    sitting "idle"
+    3.641V at 11:36 AM
+    3.522V at 12:49 PM
 - [ ] finish function that takes in parameters `(distance, sweep, tilt, increment)` and returns the coordinate pairs for the vertices to make the "plane" or polygon
+  - pan pattern starts top left then goes to top-right
+  - [when your meager brain cells collect into a pool and somehow establish thought](https://www.youtube.com/watch?v=ZeFonavUHTg)
 - [ ] start on OpenCV side that scans an image for color groups and then aims the sensor in those directions to get a sample... perhaps can find the corners in a simple case and create approximations(planes) at the appropriate distances
+  - so many of the OpenCV tutorials online literally just code out what are in the docs... it's like "we're going to find the red cup" wow! Amazing... every freaking video man.
+    it's like, no, I need to be able to find a dynamic range of unknown colors, how do I do that?
+    It will be cool when I reach my goal about the "real time running world coordinate system" (bs) regarding the known world position of the robot based on IMU values, stored 3d point objects not only for ThreeJS visual but the mirror that's running in Python for the robot's navigation, ThreeJS is just a human visualization thing.
+    I've never built something like this before so it's cool if I get something that remotely works, I realize it's trash and not real time like waving around an iPad in a room to generate a 3D mesh/point cloud collection but still... if it can navigate a robot that's the main goal
 - [ ] add "connecting..." ajax spinner to status indicators
 - [ ] fix the reset/remove ThreeJS canvas issue
 
