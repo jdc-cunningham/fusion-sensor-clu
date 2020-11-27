@@ -67,3 +67,17 @@ Oh man... I'm lucky joins the planes for you... need an irregular shape sample t
 I just realized I may be underpowering the Arduino since the power is setup as a Y-feed from the step up converter. I measured the Vin rails of the Arduino and it's only 4.9V from the 5V source shared by the Pi... docs say it's supposed to be 7-12V hmm... wondering if that's related to the ureliable timer.
 
 I may have to rework this. Something ugly like step up to 7V, parallel feed to Arduino Vin and linear regulator down to 5V to Pi... ehh that sucks.
+Ahh.. something's wrong that I'm not aware of(obvious as to why). I tried both a linear regular and a step down... have problems.
+Either Pi can't boot(linear) or the step down is having problems.
+
+Yeah that was pointless... waste of soldering time/prototype solderable breadboard space
+I just went back to what I had before but plugged into the 5V pin on the Arduino vs. the Vin
+
+So... ate some food, roughly 7 hours later from start today
+It is a bad idea to just depend on that mesh "averaging" or whatever happens when you don't exactly specify what to plot. So I think I will have to come up with that math that divides the ranges into "quadrants" to plot.
+
+It may be placebo but it seems like the Arduino is working better.
+
+See the examples here where you can't really tell(since everything is blue and not based on "2d planes") what this is, at least the distance makes sense from the center axes
+
+![you are failing doctor](./repo-images/current.png)
