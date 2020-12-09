@@ -47,33 +47,54 @@ const ThreeJsVisualizer = (props) => {
     camera.position.set( 0, 0, 100 );
     camera.lookAt( 0, 0, 0 );
 
-    // line material
-    const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    // to make distinguishable panels, will eventually add a nice color pallete/ranging
+    const getRandomHex = () => {
+      // https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+      var result           = '';
+      var characters       = 'abcdef0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < 6; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return parseInt(`0x${result}`, 16);
+    }
 
-    // working code
-    // vertices
+    console.log(coordinates);
+
+    const coordinateSets = threeJsCoordinates;
+    const step = 1;
+    const coordinateSetKeys = Object.keys(coordinateSets).sort();
     let points = [];
+    let material = new THREE.LineBasicMaterial({ color: getRandomHex() });
+    let meshGeometry;
+    let meshMaterial;
+    let mesh;
 
-    // sort by tilt angle
-    const tiltAngles = [];
+    const getNeighborCoordinates = (rowCoordinates, nextRowKey, colIndex, step) => {
+      return [
+        rowCoordinates[colIndex],
+        rowCoordinates[colIndex + step],
+        coordinateSets[nextRowKey][colIndex],
+        coordinateSets[nextRowKey][colIndex + step]
+      ];
+    };
 
-    Object.keys(threeJsCoordinates).forEach((tilt) => {
-      tiltAngles.push(parseInt(tilt));
-    });
-
-    tiltAngles.sort();
-
-    tiltAngles.forEach((tilt) => {
-      threeJsCoordinates[tilt].forEach((xyzCoordinates) => {
-        console.log(xyzCoordinates);
-        points.push(new THREE.Vector3(xyzCoordinates[0], xyzCoordinates[1], xyzCoordinates[2]));
+    coordinateSetKeys.forEach((coordinateSetKey, rowIndex) => {
+      coordinateSets[coordinateSetKey].forEach((coordinate, colIndex) => {
+        if (rowIndex < coordinateSetKeys.length - 1 && colIndex < coordinateSets[coordinateSetKey].length - step) {
+          const panelPointsFromCoordinates = getNeighborCoordinates(coordinateSets[coordinateSetKey], coordinateSetKeys[rowIndex + 1], colIndex, step);
+          panelPointsFromCoordinates.forEach((panelPoint) => {
+            points.push(new THREE.Vector3(panelPoint[0], panelPoint[1], panelPoint[2]));
+          });
+          material = new THREE.LineBasicMaterial({ color: getRandomHex() });
+          meshGeometry = new THREE.ConvexGeometry( points ); // points = vertices array
+          mesh = new THREE.Mesh(meshGeometry, material);
+          scene.add(mesh);
+          points = [];
+        }
       });
     });
 
-    const meshGeometry = new THREE.ConvexGeometry( points ); // points = vertices array
-    const mesh = new THREE.Mesh(meshGeometry, material);
-    scene.add(mesh);
-    points = [];
 
     renderer.render(scene, camera);
     animate();

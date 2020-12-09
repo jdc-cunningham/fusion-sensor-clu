@@ -28,6 +28,21 @@ Pan has its own problems(since the sensor emit/return are not on the same point/
   - add as secondary check to confirm measurements
     usensor bad on corners facing away from sensor
 
+### 12/08/2020
+I did put some time into the panel-splitter-plotter thing(ha). It works now and I added random color to the tiles but the values from the sensor are awful. In particular say facing a corner(with middle closest to cam). It's like measuring infinity or something with the ultrasonic sensor/possibly mismatch of sensor still moving while trying to measure(no feedback).
+
+![tears](./repo-images/improved-plotter-sensor-values-awful.PNG)
+
+I did make great progress on the OpenCV part. Some heavy StackOverflowing for that. It's still not written where "it just works" but I have the process down. See this example here where I was able to dynamically figure out the right HSV masks to put bounds around objects in a random picture.
+
+![in rain](./repo-images/image-processing.PNG)
+
+This project is now top of my list of things to complete though outside of work so I'm hoping to get a write up completed maybe by end of this month December 2020.
+
+I think for the "full workflow prototype" I will just use single-point sampling and treat everything as a box with generous margins of error. Maybe try averaging the "lidar" and ultrasonic sensor measurements.
+
+The IMU aspect is still a big unknown for me at this time.
+
 ### 11/26/2020
 Well... been busy lately, now have some free time, fresh brain. I had lost interest somewhat, there is still a bit of work to do.
 
