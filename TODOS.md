@@ -21,12 +21,32 @@ Pan has its own problems(since the sensor emit/return are not on the same point/
 - [ ] add reset btn on ui/feed to Arduino
   - happens when some process in Arduino doesn't finish and global variable "something in process"
     left to true
-- [ ] fix issue with rerender on input after threejs has rendered once
-- [ ] fix math and update plotting for threejs/add toggles
+- [x] fix issue with rerender on input after threejs has rendered once
+- [x] fix math and update plotting for threejs/add toggles
 - [ ] add led lidar
   - test it
   - add as secondary check to confirm measurements
     usensor bad on corners facing away from sensor
+- [ ] add method to plot robot as rectangular box in center of ThreeJS plot
+
+### 12/09/2020
+Camera targetting and offset
+- [ ] be able to take a picture and based on bounding box/centroid from OpenCV aim lidar/ultrasonic sensor assembly to get distance 
+  - example is 4ft foreground(target), everything else is about 7ft away
+    - target is 72 square inches
+
+I'm super burnt today, working on this EOD... but today was productive though, a little bit of breathing room.
+One of the things I don't understand at the moment is the focal thing of the lens... so if I see something that's 9" across and it is whatever inches on the screen at some pixel... can I roughly know how far awy it is based on that FoV value or whatever.
+
+For now will just work on the basic workflow that will determine the quadrant/point/angles to apply and then use the lidar for the distance ping... if it's closer than the threshold eg. 2' will use ultrasonic for more accurate measurement.
+
+I'm using Gimp to figure out some... well actually paint is fine too. Just need to split the image up into quadarants.
+
+One of the problems is the offset of the camera center with regard to the center of the pan/tilt 
+
+This is the mechanical offset situation... yeah I'm really burnt... can't think anymore. But this is my top priority now personally I want to do a nice writeup/video on this once I have a system that can run on its own.
+
+![need to update with math](./repo-images/math.png)
 
 ### 12/08/2020
 I did put some time into the panel-splitter-plotter thing(ha). It works now and I added random color to the tiles but the values from the sensor are awful. In particular say facing a corner(with middle closest to cam). It's like measuring infinity or something with the ultrasonic sensor/possibly mismatch of sensor still moving while trying to measure(no feedback).
