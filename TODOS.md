@@ -29,6 +29,29 @@ Pan has its own problems(since the sensor emit/return are not on the same point/
     usensor bad on corners facing away from sensor
 - [ ] add method to plot robot as rectangular box in center of ThreeJS plot
 
+### 12/10/2020
+Putting a little bit of time in. My brain is not phenomenal I still feel ike a monkey when I can't immediately get some spatial thing. Anyway I took this picture as a reference, shows what the camera can see full resolution. Man idk why this camera sucks but it also wasn't expensive. It's good enough for blob detection.
+
+Also interesting how much of "below the horizon" it sees at the height relative to the floor as a reference
+
+![still don't know](./repo-images/cam-info.png)
+
+Still don't know yet how to point the sensors at something in picture.
+Ugh... my brain sucks. Going to cheat with Sketchup/Cad
+
+For example at 3" the bottom sensor(ultrasonic) has to angle itself 4.5 degrees up to point at the center of the camera frame.
+
+I think aside from general "inference"? Interpretation... idk... I could at the very least do a center sensor sample to get an immediate depth... may suck if something is in front of the object but you could assuming having easy contours use that object as an estimation for everything else based on its bounding box contour size...
+
+There's a relationship though, at least it's a simple right-angle triangle. Half of 36" away it's 9 deg angle up.
+The Lidar is a little different, 3.1 deg for 36" and 6.2deg for 18"
+
+Image AR is 1.33 (4/3) or 0.75 (3/4)
+
+Well not scientific at all but can see the camera view angle vs. the sensor angles to point at the same thing due to offset
+
+![sketchup madness](./repo-images/cam-vs-sensors.PNG)
+
 ### 12/09/2020
 Camera targetting and offset
 - [ ] be able to take a picture and based on bounding box/centroid from OpenCV aim lidar/ultrasonic sensor assembly to get distance 
