@@ -16,6 +16,10 @@ This is due to the sensors rotating about an offset shared central axis particul
 Pan has its own problems(since the sensor emit/return are not on the same point/axis)
 
 
+### Extra
+- should be able to add something new/last minute say while robot is moving
+  - can somehow pick it up... not sure how, maybe frame by frame diffing idk
+
 ### Next
 - [ ] add background task to Arduino code to unblock itself
 - [ ] add reset btn on ui/feed to Arduino
@@ -28,6 +32,65 @@ Pan has its own problems(since the sensor emit/return are not on the same point/
   - add as secondary check to confirm measurements
     usensor bad on corners facing away from sensor
 - [ ] add method to plot robot as rectangular box in center of ThreeJS plot
+
+### 12/11/2020
+Alright, brief break, fresh brain kind of... will see how this goes. I want to update the README as the main image is a bit misleading. That was my plan till I later realized how grossly inaccurate my setup/sensors are.
+
+![external view](./repo-images/external-view.png)
+
+Here is an example of an easy layout/obstacle. This is arguable you can just do it with an ultrasonic sensor but the robot still is "dumb". This image is also concerning regarding that metal frame in the back, I imagine I could pick it out with OpenCV but then it's a non-simple, non-solid-block shape.
+
+This is the simple workflow so far:
+- Camera
+  - OpenCV
+    - histogram for masking HSV ranges, masking, contour bounding, get bound center coordinates
+- Ultrasonic/"lidar" sensor
+  - get distances
+- Python/ThreeJS
+  - gather and store points
+- IMU
+  - update stored points based on accelration/velocity/estimated position
+    - want to have "not having" as well in case it's trying to move but something is blocking it
+- Plotting/world view
+  - show where Robot is roughly and tracked objects in 3D
+
+This will be interesting because I was never really a math guy, I got that brick brain.
+
+![open cv example histogram](./repo-images/2d-histogram.PNG)
+
+So... this is not good, the histogram ranges are too close together so I'm thinking that means it will not be easy to isolate things.
+
+![example mask](./repo-images/mask-sample.PNG)
+
+Yeah this is interesting, probably one of those averaging-sample thing(see squares on histogram)... yeah maybe this is a complete failure idk.
+
+![not good lighting](./repo-images/not-good-lighting.PNG)
+
+If I do a full bound I get to see the entire picture. Modifying the "lighting" part eg. V will probably make things more/less obvious.
+
+![full v lighting](./repo-images/full-lighting.PNG)
+
+Oh wow `0-255` V value is more obvious regarding finding the big stuff. I can do a bounding sample on this. Haha... drew contour around entire thing. One of the things I have to add is an array of the areas and then I can "descendingly" check them out against some threshold like "only care about # square pixels"
+
+Hmm... kind of ran into a small wall here, while I was able to sort the contour areas in descending order, they don't seem to behave as I would expect when plotting them... if I plot areas that have near 0 area the biggest squares appear...
+
+Nope I made a mistake, I was using the loop counter as an index against the saved contours but it should have been the index saved with the area. I'm developing on two different computers so I don't have code to accompany these words until I put it all together.
+
+![found boxes](./repo-images/found-boxes.PNG)
+
+The square in square is interesting, I suppose that is possible like a small box in front of a bigger box.
+
+What is also concerning is the lines on the floor... it is possible those are not on the same plane/actually vertical. You'd need something to figure that out based on the direction of the dots/contours to figure out it's a plane/ground.
+
+So yeah... I think from this I can tell depending on circumstances (same average light distribution/clustered 2d histogram) that I will need to use full lighting/maybe do a wide physical sensor sample to confirm.
+
+The floor/horizon detection is interesting too.
+
+#### sensor targetting from camera
+
+I'm going to try and reason out the camera aiming now (excuse to charge Ubuntu laptop where I do OpenCV).
+
+
 
 ### 12/10/2020
 Putting a little bit of time in. My brain is not phenomenal I still feel ike a monkey when I can't immediately get some spatial thing. Anyway I took this picture as a reference, shows what the camera can see full resolution. Man idk why this camera sucks but it also wasn't expensive. It's good enough for blob detection.
