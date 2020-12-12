@@ -32,6 +32,38 @@ Pan has its own problems(since the sensor emit/return are not on the same point/
   - add as secondary check to confirm measurements
     usensor bad on corners facing away from sensor
 - [ ] add method to plot robot as rectangular box in center of ThreeJS plot
+  - make sure it's vertically simulated correctly based on camera and possibly if mounted on wheels
+
+### 12/11/2020 later
+
+I'm going to try and come up with the offset function for the sensor aiming from camera.
+I'm using SketchUp/3D program to work it out.
+
+5.4 deg right, start pos 94
+7.1 deg down, start pos 89
+
+245cm -> 96.5in straight forward measurement
+first angle attempt 5 right, 7 deg down
+123 -> 48in
+
+I just realized the web interface doesn't have a granularity that far eg. 0.1
+Also currently don't have web triggered/response measurements, I'll have to try these manually.
+This is actually pretty hard.
+Initially I had plans to use a laser pointer, that would have been a good idea to have but hard to mount to sensor, adds more offset.
+
+Ugh... these sensors man it's 2" off the "lidar"
+
+38.25 to 38.5" away
+
+Ehh... I don't even know if this is the right way to think about it. It's interesting if you point your arm/hand at something and then close either eye/see if it lines up with the target, it probably doesn't. It does relative to your eye/dominant but moving your head you can see your arm pointing somewhere else. That offset is what my dumb brain is trying to figure out what the formula is.
+
+This is a simplified drawing over an image but it's a shot in my room/office/workshop. Everywhere else it's about 8feet deep but the box is the 38.25" away mentioned above.
+
+I think this is correct, the box is the photo and I actually brought it in/scaled it down and it matches. The big box is 37" across and whatever value vertically to match AR and it's 36" away. The angle is a "3D angle" I think, so I'm trying to add planes in to extract the up/down and left/right angles.
+
+I'm pretty mentally spent today so not sure if I'll really be productive.
+
+![calculate offset](./repo-images/offset-calc.PNG)
 
 ### 12/11/2020
 Alright, brief break, fresh brain kind of... will see how this goes. I want to update the README as the main image is a bit misleading. That was my plan till I later realized how grossly inaccurate my setup/sensors are.
@@ -89,6 +121,8 @@ The floor/horizon detection is interesting too.
 #### sensor targetting from camera
 
 I'm going to try and reason out the camera aiming now (excuse to charge Ubuntu laptop where I do OpenCV).
+
+Once I have a full workflow setup, will be nice to just run a command and it will do the photo/outline stuff/send it to the webserver and then I can see if it's performing the right "algorithm" for cleaning up/sampling an image to find objects.
 
 
 
