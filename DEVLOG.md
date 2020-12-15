@@ -34,6 +34,10 @@ Pan has its own problems(since the sensor emit/return are not on the same point/
 - [ ] add method to plot robot as rectangular box in center of ThreeJS plot
   - make sure it's vertically simulated correctly based on camera and possibly if mounted on wheels
 
+### Get camera samples
+Need to take sample photos at known distances from camera in Z direction. The item does not move in x-direction.
+Known size of object shows it sliding left/right and how much so can estimate angle to point sensor assembly.
+Will take initial straight on measumrent if nothing's in the way
 ### 12/11/2020 later
 
 I'm going to try and come up with the offset function for the sensor aiming from camera.
