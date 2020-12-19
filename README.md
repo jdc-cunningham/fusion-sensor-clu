@@ -1,7 +1,7 @@
-### About
+## About
 This is a piece of crap SLAM attempt from scratch with a Raspberry Pi, camera, ultrasonic/"lidar" sensor on a pan/tilt bed and a 9-axis IMU. Please note I am coming from web-application development so I'm not a SLAM expert or anything, this is just some hobby/fun project for me, don't reference it for anything that matters.
 
-### Completion
+## Completion
 - [ ] vision system
   - [x] basics of masking, determining color and light ranges by histograms, determining bounding boxes of largest contour areas
   - [ ] make an algorithm for sampling based on available data ranges and best way to find all objects in an image due to various colors/shapes
@@ -16,7 +16,7 @@ This is a piece of crap SLAM attempt from scratch with a Raspberry Pi, camera, u
 - [ ] complete the system where it can be turned on, starts navigating on its own and outputs telemetry to web interface
 
 
-#### Example application
+### Example application
 ![intended vehicle](./repo-images/external-view.png)
 
 I am aware that there are methods out there like "visual inertial semantic representation" which are insane! I've seen drone applications with a single camera and it's frame-by-frame attaching dots to things and keeping track of them. No distance measuring like I am. And they pair that with the IMU data to generate depth that's my understanding anyway.
@@ -29,7 +29,7 @@ Initially I thought the sensors were way more accurate than they actually are. A
 
 This build is bad in many ways primarily due to the mechanical design/materials and lack of feedback from the pan/tilt sensor bed.
 
-### The stack
+## The stack
 - web
   - ReactJS, websocket, ThreeJS
 - robot
@@ -43,12 +43,12 @@ This build is bad in many ways primarily due to the mechanical design/materials 
 
 While I do have a web interface for a visual aspect and manual controls, this robot is intended to operate on its own. The 3D point cloud environment is maintained in memory against the IMU measurements, that's the plan anyway.
 
-#### The web interface
+### The web interface
 ![showing example 9-point measurement plot](./repo-images/improved-plotter-sensor-values-awful.PNG)
 
 Primarily as mentioned this interface just gives you direct control. Ideally/in the end the ThreeJS part will be almost real time showing the robot's position and the moving environment around it based on what was tracked before. It will all be super dumbed down eg. "everything is a box". One thing I have to figure out as well is mapping the horizon/ground plane.
 
-#### The vision aspect
+### The vision aspect
 
 ![example masking](./repo-images/found-boxes.PNG)
 
@@ -64,7 +64,7 @@ The current process is:
   * maybe involves an initial panning sample with lidar due to angle/fov issue of seen object
 * pass these values to the "world coordinate engine" ooh buzzwords
 
-#### The maths/IMU
+### The maths/IMU
 * points are determined for 3D plotting
   * go into ThreeJS for visual
   * go into Python/ram
@@ -72,22 +72,22 @@ The current process is:
 * using this and 3D collision detection(box overlap) can tell if you're going to run into something or not
 * the known freespace in front determines how far the robot can go before doing something/doing more measurements
 
-#### The "main loop"
+### The "main loop"
 This is the logic of the robot/why it does what it does. Which is pretty much to keep moving forward if possible. Ultimately the goal of it is to try and map the room. I know I know... just buy a spinning lidar. But That's not the point again not dealing with perfect walls. Also eventually I will take what I've learned here and move onto more powerful boards eg. a Beaglebone or STM32.
 
-#### Fantasy/future
+### Fantasy/future
 * recognition of previously seen objects
   * this one is kind of hard since the objects are all blocks but you could try and average boxes/points and roughly realize these "constellations" haha bs, are some area you've been at before.
 * ML for finding the boxes
-  * I don't know how pheasible, excuse for me to finally try and learn ML for real. I'd have to take so many sample images and annotate them. I had a thought where if the robot fails/runs into something, the last image it has/predictions I could correct(tech parrot).
+  * I don't know how feasible, excuse for me to finally try and learn ML for real. I'd have to take so many sample images and annotate them. I had a thought where if the robot fails/runs into something, the last image it has/predictions I could correct(tech parrot).
 
-### Progress
+## Progress
 
-#####  11-12-2020
+####  11-12-2020
 I have written a basic pan/tilt measurement sampling workflow which is then plotted in 3D using ThreeJS. The implementation is basic right now as I have to finish figuring out the math aspect/rendering it correctly.
 [![youtube video of web interface to threejs](repo-images/yt2.PNG)](https://www.youtube.com/watch?v=VOdi__m6o3g)
 
-##### 10-28-2020
+#### 10-28-2020
 At this time this project is far from complete. This is also not really meant to be reproduced, it has a lot of flaws.
 
 [![youtube video of web interface controlling pan tilt servos](repo-images/yt-thumb.PNG)](https://www.youtube.com/watch?v=_qi6G4832OI)
