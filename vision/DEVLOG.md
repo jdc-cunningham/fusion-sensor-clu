@@ -23,10 +23,17 @@ The vision process boils down to using find contours after applying HSV ranges t
   - point sensor bed to get measurements, hopefully hit targets
   - report to internal world coordinate system and to ThreeJS web interface
 
+### 02/14/2021
+Working on the plot value chunker
+https://jsfiddle.net/qsw2co0x/18/
+
+
 ### 02/13/2021
 Back on this project again finally... had to make a couple of bs personal todo-esk crud apps so I can feel good about my life.
 I have to remember the steps.
 This is pretty neat actually I have to consider if it's dark and then if so change the scanning methods eg. rely on ToF sensors more than vision.
+
+I was trying to return sectioned x-ranges from histogram1D although the first sample image has a contiguous plot so I'm hoping the new images have broken up x ranges/groups on the plot so I can return the separated array of array start/stop pairs
 
 ### ~~12/24/2020~~ 12/25/2020
 ~~I'm not as "fresh" as I'd like to be, I had to deal with some stuff hours ago. I'm hoping I can still be productive.

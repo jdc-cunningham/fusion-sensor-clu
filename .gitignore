@@ -1,5 +1,6 @@
 # files
 .env
+.pyc
 
 # folders
 node_modules/

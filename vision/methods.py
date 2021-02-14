@@ -17,20 +17,39 @@ from matplotlib import pyplot as plt
 def histogram1D(imgPath):
   img = cv2.imread(imgPath, 0) # grayscale
   counts, bins, bars = plt.hist(img.ravel(), 256, [0, 256])
-  continuousPairs = []
+  positiveBounds = [] # regarding x-values on plot
   activeIndex = 0
 
   for i in range(counts.size):
-    if (continousPairs.size == 0) and counts[i] > 0:
-      continuousPairs.append(counts[i])
+    # print i, counts[i], activeIndex, len(continuousPairs)
+    # if counts[i] > 0:
+    #   if len(continuousPairs) and continuousPairs[activeIndex] and (counts[i + 1] == 0 or i == counts.size - 1):
+    #     continuousPairs[activeIndex].append(counts[i])
+    #   elif not len(continuousPairs) or not continuousPairs[activeIndex]:
+    #     continuousPairs.append([counts[i]])
+    # elif len(continuousPairs) and i < counts.size - 1 and counts[i + 1] > 0:
+    #   if (len(continuousPairs[activeIndex])):
+    #     activeIndex += 1
 
-    if counts[i] > 0 and len(continousPairs[activeIndex]) == 0:
-      continuousPairs[activeIndex] = [counts[i]]
-    elif:
-      continuousPairs[activeIndex].append(counts[i])
-      activeIndex += 1
 
-    print continousPairs
+
+  print continuousPairs
+
+  # for (let i = 0; i < arr.length; i++) {
+  #   if (arr[i] > 0) {
+  #     if (chunkedArr[activeIndex] && (arr[i + 1] === 0 || i === arr.length - 1)) {
+  #       chunkedArr[activeIndex].push(arr[i]);
+  #     } else {
+  #       if (!chunkedArr[activeIndex]) {
+  #         chunkedArr[activeIndex] = [arr[i]];
+  #       }
+  #     }
+  #   } else {
+  #     if (chunkedArr.length && arr[i + 1] > 0) {
+  #       activeIndex += 1;
+  #     }
+  #   }
+  # }
 
   return continuousPairs
 
