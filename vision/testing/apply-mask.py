@@ -4,7 +4,7 @@ import cv2
 
 # https://stackoverflow.com/questions/10948589/choosing-the-correct-upper-and-lower-hsv-boundaries-for-color-detection-withcv
 
-img = cv2.imread('./sample-images/test_light.jpg')
+img = cv2.imread('./sample-images/low_light_trash_cat.jpg')
 hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 # modifying h between 0-20, 0-100, 0-255 reveals more and more of colors
 # HSV x axis S, Y hue
@@ -13,5 +13,5 @@ hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 # these values are currently manually determined by looking at the graph
 # outputs between histogram 1D and 2D
 # hsv
-mask = cv2.inRange(hsv, (50, 12, 50), (106, 166, 195))
+mask = cv2.inRange(hsv, (20, 12, 0), (75, 61, 87))
 cv2.imwrite('./output-images/mask-applied.jpg', mask)
