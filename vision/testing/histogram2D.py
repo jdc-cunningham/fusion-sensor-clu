@@ -12,3 +12,7 @@ plt.show()
 
 # x axis shows S values, Y show Hue
 # https://docs.opencv.org/master/dd/d0d/tutorial_py_2d_histogram.html
+
+# values returned max bounds:
+# x, S: 12, 166
+# y, H: 50, 106

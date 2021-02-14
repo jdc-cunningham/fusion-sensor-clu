@@ -10,7 +10,7 @@ im = cv2.imread('./output-images/mask-applied.jpg')
 imCopy = im.copy()
 imgray=cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
 ret,thresh = cv2.threshold(imgray,127,255,0)
-image, contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+contours, hierarchy =  cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 cv2.drawContours(imCopy,contours,-1,(255,0,0), 1) # working, shows too many
 
 largest_contour_index = 0
