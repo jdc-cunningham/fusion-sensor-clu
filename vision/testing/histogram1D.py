@@ -5,13 +5,11 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-img = cv2.imread('./sample-images/test_light.jpg', 0) # grayscale, outputs range between 15, 195
+img = cv2.imread('./sample-images/dark_hallway.jpg', 0) # grayscale, outputs range between 15, 195
 
 # may have speed gains not using plot to get values from ravel
 
 # https://stackoverflow.com/questions/20128898/get-data-points-from-a-histogram-in-python
 counts, bins, bars = plt.hist(img.ravel(), 256, [0, 256])
-
-print counts[26]
 
 plt.show()
