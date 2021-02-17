@@ -21,8 +21,6 @@ def histogram1D(imgPath):
   activeIndex = 0
 
   for i in range(counts.size):
-    print i, counts[i]
-
     if counts[i] > 0:
       if len(positiveBounds) > 0:
         if len(positiveBounds[activeIndex]) == 2:
@@ -35,6 +33,9 @@ def histogram1D(imgPath):
         if len(positiveBounds[activeIndex]) == 1:
           positiveBounds[activeIndex].append(i - 1)
 
+    # this has to factor in the edges, depending on thresholds if they're relevant
+    # edges as in x = 0, or x = 255 for the 0-255 range
+
   return positiveBounds
 
 # this is used to figure out the colors to use (HS in HSV)
@@ -43,6 +44,12 @@ def histogram2D(imgPath):
   img = cv2.imread(imgPath)
   hsv = cv2.cvtColor(img,cv.COLOR_BGR2HSV)
   hist2D = cv2.calcHist([hsv], [0, 1], None, [180, 256], [0, 180, 0, 256])
+
+  # hist2D is an array of arrays, the exponential values I'm assuming are the colors in the plot
+  # but I'm going to take an external/box approach.
+  # need to somehow chop up the values
+  # large continuous clusters more than likely means same color/object big area eg. floor
+
   return hist2D
 
 # preps the image for findContours

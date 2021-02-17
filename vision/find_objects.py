@@ -1,5 +1,5 @@
 from methods import *
 
-imgPath = './testing/sample-images/test_light.jpg'
+imgPath = './testing/sample-images/dark_hallway.jpg'
 
 print histogram1D(imgPath)

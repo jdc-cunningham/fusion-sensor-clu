@@ -9,6 +9,9 @@ The vision process boils down to using find contours after applying HSV ranges t
 - store into world coordinate system running in thread to update local map
 - decide which way robot goes
 
+- calibrate camera with horizon
+- if boxes/boundaries are floating in midair, extend them downwards... unless height or sweep determines nothing under them
+
 ### Notes
 - prioritize finding/scanning of nearest objects from an initial depth probe
 
@@ -22,6 +25,11 @@ The vision process boils down to using find contours after applying HSV ranges t
   - apply histograms/get bounds
   - point sensor bed to get measurements, hopefully hit targets
   - report to internal world coordinate system and to ThreeJS web interface
+
+### 02/17/2021
+Starting to work on histogram2d which finds H and S values for the mask.
+Seems like need to look for clusters/get some general rules down eg. closer to 0 for S/x-axis means lighter color.
+May need better sample images that have obvious color groups.
 
 ### 02/16/2021
 Did get distracted with that readme not really anything new ego filling.
