@@ -23,10 +23,13 @@ The vision process boils down to using find contours after applying HSV ranges t
   - point sensor bed to get measurements, hopefully hit targets
   - report to internal world coordinate system and to ThreeJS web interface
 
+### 02/16/2021
+Did get distracted with that readme not really anything new ego filling.
+Aiming to put like 2 hours of silence work into this project since it's not trivial/I really need to focus/pay attention.
+
 ### 02/14/2021
 Working on the plot value chunker
 https://jsfiddle.net/qsw2co0x/18/
-
 
 ### 02/13/2021
 Back on this project again finally... had to make a couple of bs personal todo-esk crud apps so I can feel good about my life.

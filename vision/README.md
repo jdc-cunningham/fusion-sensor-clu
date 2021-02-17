@@ -12,3 +12,7 @@ These bounds are treated as cubes for now/to make it simple. The distances are m
 ![approximated 3D objects](./tof.PNG)
 
 I do realize how "lucky"/ideal this simple sample image is. Indeed other images are way harder to draw bounds around, particularly the 2D histogram aspect, that's why I have to step through/sample all the groups. It's also noticeable on the single core Raspberry Pi that can take a process and make it 30 times longer to process due to its processing capability.
+
+### Other notes
+
+Will point out, with the ToF sensors and if it's very dark(V from 1D histogram) can also do preliminary distance sweeps.

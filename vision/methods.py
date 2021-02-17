@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 
 # this is used to figure out the light/intensity ranges (V in HSV)
 # imgPath - {string} to be used for histogram
-# returns list (x - values for V) from histogram plot
+# returns list of lists (x - range values for V) from histogram plot where Y is positive
 def histogram1D(imgPath):
   img = cv2.imread(imgPath, 0) # grayscale
   counts, bins, bars = plt.hist(img.ravel(), 256, [0, 256])
@@ -21,37 +21,21 @@ def histogram1D(imgPath):
   activeIndex = 0
 
   for i in range(counts.size):
-    # print i, counts[i], activeIndex, len(continuousPairs)
-    # if counts[i] > 0:
-    #   if len(continuousPairs) and continuousPairs[activeIndex] and (counts[i + 1] == 0 or i == counts.size - 1):
-    #     continuousPairs[activeIndex].append(counts[i])
-    #   elif not len(continuousPairs) or not continuousPairs[activeIndex]:
-    #     continuousPairs.append([counts[i]])
-    # elif len(continuousPairs) and i < counts.size - 1 and counts[i + 1] > 0:
-    #   if (len(continuousPairs[activeIndex])):
-    #     activeIndex += 1
+    print i, counts[i]
 
+    if counts[i] > 0:
+      if len(positiveBounds) > 0:
+        if len(positiveBounds[activeIndex]) == 2:
+          activeIndex += 1
+          positiveBounds.append([i])
+      else:
+        positiveBounds.append([i])
+    else:
+      if len(positiveBounds) > 0:
+        if len(positiveBounds[activeIndex]) == 1:
+          positiveBounds[activeIndex].append(i - 1)
 
-
-  print continuousPairs
-
-  # for (let i = 0; i < arr.length; i++) {
-  #   if (arr[i] > 0) {
-  #     if (chunkedArr[activeIndex] && (arr[i + 1] === 0 || i === arr.length - 1)) {
-  #       chunkedArr[activeIndex].push(arr[i]);
-  #     } else {
-  #       if (!chunkedArr[activeIndex]) {
-  #         chunkedArr[activeIndex] = [arr[i]];
-  #       }
-  #     }
-  #   } else {
-  #     if (chunkedArr.length && arr[i + 1] > 0) {
-  #       activeIndex += 1;
-  #     }
-  #   }
-  # }
-
-  return continuousPairs
+  return positiveBounds
 
 # this is used to figure out the colors to use (HS in HSV)
 # imgPath - {string} to be used for histogram
