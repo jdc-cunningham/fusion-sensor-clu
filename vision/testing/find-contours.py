@@ -35,7 +35,7 @@ for i in reversed(bounded_contours):
   loop_counter += 1
   if loop_counter == 0:
     continue
-  if i['area'] < 1000:
+  if i['area'] < 10000:
     continue
   print i['area']
   r = cv2.boundingRect(contours[i['cindex']])

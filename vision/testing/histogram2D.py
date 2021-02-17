@@ -3,7 +3,7 @@ import numpy as np
 import cv2 as cv
 from matplotlib import pyplot as plt
 
-img = cv.imread('./sample-images/low_light_trash_cat.jpg')
+img = cv.imread('./sample-images/test_light.jpg')
 hsv = cv.cvtColor(img,cv.COLOR_BGR2HSV)
 hist = cv.calcHist([hsv], [0, 1], None, [180, 256], [0, 180, 0, 256])
 
