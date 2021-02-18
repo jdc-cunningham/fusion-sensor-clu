@@ -41,6 +41,20 @@ Lol so I ping a friend of mine who's really good at math and I'm like I'm trying
 > 3) Now you iterate for some large number of iterations (e.g. 100). At each step in tje iteration, calculate the euclidean distance from each sample point to each seed point. If you have 200 sample points and 4 seed points, you will calculate 800 distances. Distance = sqrt((x2-x1)^2 (y2-y1)^2). Then for each sample point, determine which seed point is closest. For 4 seed points, you will end up with 4 groups of points. (e.g., sample point 1 is closest to seed point 3. sample point 100 is closest to seed point 2.). Finally move each seed point to the average (x, y) of the sample points in it's group. (e.g. if there are 50 sample points closest to seed point 4, calculate the average (x, y) of those 50 sample points. That average is the new location of seed point 4 for the nexr iteration). Over time, tje seed points will move towards the centroids of each data set, and each group of sample
  points willbe sorted according to which point is nearest.
 
+I added a more obvious color sampling image. The goal isn't to set values directly rather to write the algorithm that pulls them from the histograms and then ties in with a "loop" with the ToF sensors for "redundancy".
+
+ehh... the k-means or other grouping ways will be interesting. I still don't know what the colors mean on 2D Histogram time to crowd source(look like a dumbass online).
+
+There's probably something stupid/obvious I'm blissfully unaware of that makes this entire approach stupid but I'm going to finish thing. It's a neat little project and I will transfer the knowledge to my next project.
+
+Yeah you can see below targetting the largest blob is not such a safe approach. Also these boxes are massive will see about reducing them. I know... if you had some kind of trained object detection system could run frame by frame (real time) vs. this single frame approach.
+
+![ehh](./ehh.PNG)
+
+Not much better higher sq pixel area filter is better seems like. Thing to consider is square overlap.
+
+So far my rotate color reference doesn't seem to match.
+
 ### 02/16/2021
 Did get distracted with that readme not really anything new ego filling.
 Aiming to put like 2 hours of silence work into this project since it's not trivial/I really need to focus/pay attention.

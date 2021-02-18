@@ -5,7 +5,7 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-img = cv2.imread('./sample-images/dark_hallway.jpg', 0) # grayscale, outputs range between 15, 195
+img = cv2.imread('./sample-images/assorted_color_items.jpg', 0) # grayscale, outputs range between 15, 195
 
 # may have speed gains not using plot to get values from ravel
 
