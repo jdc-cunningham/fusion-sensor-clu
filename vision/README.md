@@ -5,7 +5,9 @@ It is easier to visually see what I mean by the 1D/2D histograms seeing the imag
 
 ### "The process"
 
-![H and S plotted on a chart](./color-reference.PNG)
+Sorry I'm too lazy to merge these images together right now. This color chart is used as a reference for the purple sample 2D histogram below. I still have to validate manually that this actually works.
+
+![H and S plotted on a chart](./color-reference-aligned.png)
 This image sourced from here: https://stackoverflow.com/a/48367205/2710227
 
 ![vision approach annotated](./vision-approach-1-annotated.jpg)
