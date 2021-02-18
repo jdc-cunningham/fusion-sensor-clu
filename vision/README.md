@@ -5,6 +5,9 @@ It is easier to visually see what I mean by the 1D/2D histograms seeing the imag
 
 ### "The process"
 
+![H and S plotted on a chart](./color-reference.PNG)
+This image sourced from here: https://stackoverflow.com/a/48367205/2710227
+
 ![vision approach annotated](./vision-approach-1-annotated.jpg)
 
 These bounds are treated as cubes for now/to make it simple. The distances are measured with the ToF sensors and then these values are stored in the "world coordinate system" where the center point(where robot was first turned on) is moved around based on IMU data.

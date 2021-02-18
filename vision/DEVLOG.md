@@ -31,6 +31,16 @@ Starting to work on histogram2d which finds H and S values for the mask.
 Seems like need to look for clusters/get some general rules down eg. closer to 0 for S/x-axis means lighter color.
 May need better sample images that have obvious color groups.
 
+Lol so I ping a friend of mine who's really good at math and I'm like I'm trying to do this (screenshot below) and then he dumps this out into a text message lmao crazy. So yeah I gotta learn/see if I can use k-means.
+
+![grouping](./grouping-dots.PNG)
+
+> I have some scripts that do something like this. The technique is called "k-means". It's actually a pretty simple script, you may be able to write it yourself without much guidance. It doesnt draw boundary curves. It uses a number of "seed" points to determine which points are closest together (in groups). Here's the basics.
+> 1) determine the number of groups to form (e.g. 4 groups). This is your k value. K=4
+> 2) seed k=4 points randomly in your design space. If the x and y axes are both 0-256, then give each seed point a random (x, y) coordinate.
+> 3) Now you iterate for some large number of iterations (e.g. 100). At each step in tje iteration, calculate the euclidean distance from each sample point to each seed point. If you have 200 sample points and 4 seed points, you will calculate 800 distances. Distance = sqrt((x2-x1)^2 (y2-y1)^2). Then for each sample point, determine which seed point is closest. For 4 seed points, you will end up with 4 groups of points. (e.g., sample point 1 is closest to seed point 3. sample point 100 is closest to seed point 2.). Finally move each seed point to the average (x, y) of the sample points in it's group. (e.g. if there are 50 sample points closest to seed point 4, calculate the average (x, y) of those 50 sample points. That average is the new location of seed point 4 for the nexr iteration). Over time, tje seed points will move towards the centroids of each data set, and each group of sample
+ points willbe sorted according to which point is nearest.
+
 ### 02/16/2021
 Did get distracted with that readme not really anything new ego filling.
 Aiming to put like 2 hours of silence work into this project since it's not trivial/I really need to focus/pay attention.
