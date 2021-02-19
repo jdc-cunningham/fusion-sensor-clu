@@ -13,5 +13,5 @@ hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 # these values are currently manually determined by looking at the graph
 # outputs between histogram 1D and 2D
 # hsv
-mask = cv2.inRange(hsv, (0, 200, 16), (10, 255, 210))
+mask = cv2.inRange(hsv, (101, 94, 16), (104, 117, 210))
 cv2.imwrite('./output-images/mask-applied.jpg', mask)

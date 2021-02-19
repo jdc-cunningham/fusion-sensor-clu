@@ -26,6 +26,16 @@ The vision process boils down to using find contours after applying HSV ranges t
   - point sensor bed to get measurements, hopefully hit targets
   - report to internal world coordinate system and to ThreeJS web interface
 
+### 02/18/2021
+Only tears today...
+
+![bad contour obvious object](./example-of-bad-contour-finding-good-isolation.PNG)
+
+So above you can see that I isolated this red coffee container and while it is isolated pretty well the contours could not find it/have a big enough bounding rectangle.
+
+So I need some alternative to finding contours where I can do a cluster finding like this. I saw some good stuff like [this one](https://stackoverflow.com/questions/17157296/detecting-clusters-of-white-pixels-in-an-image-using-opencv). Talked about erosion and dilation... anyway I frantically tried to do stuff but got nowhere... this is a tough one I'm not a great math guy.
+
+Almost seems like I need to check both sides eg. in the case of lots of bright light, high density pixels/map the dark areas(referring to second image below) and use the clustering technique.
 ### 02/17/2021
 Starting to work on histogram2d which finds H and S values for the mask.
 Seems like need to look for clusters/get some general rules down eg. closer to 0 for S/x-axis means lighter color.
