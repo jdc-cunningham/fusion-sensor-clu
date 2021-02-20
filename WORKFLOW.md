@@ -14,6 +14,8 @@
 - [ ] Move/update 3D world
   - do point translation/kinematics/collision detection
 
+end goal is to navigate my entire apartment eg. 5 "rooms" and 1 hallway
+
 ### Nice to have features
 - [ ] light detection/in relation to 2D HSV histogram
 - [ ] basic object recognition after tagging element for updating map "seen it before"
