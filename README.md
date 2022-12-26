@@ -1,3 +1,7 @@
+## Update
+
+The second/current version of this approach is [here](https://github.com/jdc-cunningham/pi-zero-2-robot-navigation-head) "Chisel Bot"
+
 ## About
 This is a piece of crap SLAM from scratch attempt with a Raspberry Pi, camera, ultrasonic/"lidar" sensor on a pan/tilt bed and a 9-axis IMU. Please note I am coming from web-application development so I'm not a SLAM expert or anything, this is just some hobby/fun project for me, don't reference it for anything that matters.
 
